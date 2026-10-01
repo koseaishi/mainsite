@@ -191,6 +191,63 @@ section {
     transform: translateY(-2px);
 }
 
+.socials .twitch-link {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+.twitch-link > * {
+    position: relative;
+    z-index: 1;
+}
+
+.live-badge {
+    display: none;
+    margin-left: auto;
+    padding: 3px 5px;
+    background: #d94242;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+}
+
+.twitch-link.is-live {
+    border-color: #d94242;
+    box-shadow: 0 0 14px rgba(217, 66, 66, 0.3);
+}
+
+.twitch-link.is-live .live-badge {
+    display: inline-block;
+}
+
+.twitch-link.is-live::after {
+    position: absolute;
+    z-index: 0;
+    top: -50%;
+    bottom: -50%;
+    left: -45%;
+    width: 28%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+    content: "";
+    pointer-events: none;
+    transform: skewX(-20deg);
+    animation: twitch-shine 2.8s ease-in-out infinite;
+}
+
+@keyframes twitch-shine {
+    0%, 35% { left: -45%; }
+    75%, 100% { left: 125%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .twitch-link.is-live::after {
+        animation: none;
+    }
+}
+
 .icon {
     width: 24px;
     height: 24px;

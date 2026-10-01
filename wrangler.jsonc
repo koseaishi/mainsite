@@ -1,5 +1,12 @@
 {
-  "name": "twitch-worker",
-  "compatibility_date": "2026-10-01",
-  "main": "twitch-status-worker.js"
+	"name": "twitch-worker",
+	"compatibility_date": "2026-10-01",
+	"main": "twitch-status-worker.js",
+	"kv_namespaces": [
+		{
+			"binding": "STREAM_STATE",
+			"id": "d4ff7dc1f95642839dc0099c3e1f1d09",
+			"remote": true
+		}
+	]
 }
