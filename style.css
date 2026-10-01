@@ -155,21 +155,22 @@ section {
 /* ---------- SOCIALS ---------- */
 
 .socials {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
 
     gap: 8px;
 }
 
 .socials a {
-    min-height: 48px;
+    width: 140px;
+    min-height: 40px;
 
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 8px;
 
-    padding: 9px 12px;
+    padding: 5px 8px;
 
     background: var(--card);
 
@@ -191,8 +192,8 @@ section {
 }
 
 .icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
 
     display: grid;
     place-items: center;
@@ -201,7 +202,7 @@ section {
 
     background: var(--indigo);
 
-    color: var(--cream);
+    color: var(--white);
 
     border-radius: 5px;
 
