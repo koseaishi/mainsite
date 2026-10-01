@@ -1,0 +1,5 @@
+{
+  "name": "twitch-worker",
+  "compatibility_date": "2026-10-01",
+  "main": "twitch-status-worker.js"
+}
