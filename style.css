@@ -269,13 +269,8 @@ a:hover .arrow {
 
     flex-shrink: 0;
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--blue),
-            var(--indigo)
-        );
-
+    background: var(--blue);
+    
     color: var(--cream);
 
     border-radius: 7px;
