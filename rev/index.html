@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VOD Review</title>
+<style>
+:root{--bg:#171B24;--card:#202633;--white:#E4D9D5;--muted:rgba(228,217,213,.58);--border:rgba(228,217,213,.13);--cream:#FDE3BA;--yellow:#F4D17D;--blue:#1F5E8D;--indigo:#414A84;--dark:#393F4E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font:14px/1.45 Inter,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:1240px;margin:0 auto;padding:16px 16px 40px}
+header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.quick-add{position:sticky;top:16px;z-index:10;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;margin:0 -4px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;box-shadow:0 8px 20px rgba(0,0,0,.22)}
+.quick-add input:first-child{flex:2 1 300px}
+.quick-add input:nth-child(2){flex:1 1 180px}
+.quick-add.drop-active{outline:2px dashed var(--yellow);outline-offset:2px}
+.quick-add .drop-status{font-size:12px;color:var(--muted)}
+.logo{font-weight:800;color:var(--cream);margin-right:auto;font-size:16px}
+.logo b{color:var(--yellow)}
+h2{color:var(--cream);margin:0 0 10px;font-size:20px}
+h3{color:var(--yellow);margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+button,input,select,textarea{font:inherit;color:var(--white);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 10px}
+button{cursor:pointer;transition:.15s}
+button:hover,.card.click:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-1px)}
+button.on{background:var(--indigo);border-color:var(--indigo);color:var(--cream)}
+button.x{padding:2px 7px;color:var(--muted)}
+input,select,textarea{width:100%;background:var(--bg)}
+textarea{resize:vertical;min-height:60px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;transition:.15s}
+.card.click{cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.muted{color:var(--muted);font-size:12px}
+.sec{margin-bottom:24px}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.row>*{flex:0 1 auto}.grow{flex:1 1 140px!important}
+.tile{display:inline-block;background:var(--indigo);color:var(--cream);border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700}
+.ws{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px}
+@media(max-width:900px){.ws{grid-template-columns:1fr}}
+.ws>.card{display:flex;min-height:62vh;max-height:78vh}
+#panel{display:flex;flex:1;flex-direction:column;min-height:0;width:100%}
+.drawer{position:fixed;z-index:20;inset:0 0 0 auto;width:min(410px,100vw);padding:18px;background:var(--bg);border-left:1px solid var(--border);overflow:auto;transform:translateX(102%);transition:transform .2s ease}
+.drawer.open{transform:translateX(0)}
+.scrim{position:fixed;z-index:19;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.open{opacity:1;pointer-events:auto}
+.ink-canvas{position:fixed;inset:0;z-index:45;width:100vw;height:100vh;pointer-events:none;touch-action:none}
+.ink-canvas.active{pointer-events:auto;cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='m4 20 4.2-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z' fill='white' stroke='%23171B24' stroke-width='1.5'/%3E%3C/svg%3E") 3 20,crosshair}
+.ink-canvas.active.erase{cursor:cell}
+.ink-tools{position:fixed;z-index:50;left:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;padding:5px;background:var(--card);border:1px solid var(--border);border-radius:7px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.ink-tools button{min-width:0;width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1}
+.ink-tools button.on{background:var(--yellow);border-color:var(--yellow);color:#171B24}
+.ink-tools #clearInk{color:#ff9292}
+.note-list{flex:1;min-height:0;overflow:auto;margin-bottom:8px}
+.note-compose{position:static;flex:none;margin-top:auto;background:var(--card);border-top:1px solid var(--border);padding:12px 0 2px}
+.note-compose>.row:first-child{margin-bottom:8px;padding-bottom:3px}
+.note-compose>#nt{margin-top:2px;margin-bottom:4px;min-height:72px}
+.note-entry{padding:6px 0}
+.note-view{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.note-text{flex:1;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.note-actions{display:flex;flex:none;gap:4px}
+.note-actions button{padding:3px 7px}
+.note-edit{width:100%;min-width:0}
+.note-edit textarea{display:block;width:100%;min-width:0;min-height:68px;max-height:160px;resize:vertical}
+.note-edit .row{justify-content:flex-end;margin-top:6px}
+.note-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:8px}
+.export-split{display:inline-flex;align-items:stretch;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.export-split button,.export-split select{width:auto;min-width:0;border:0;border-radius:0}
+.export-split select{border-left:1px solid var(--border);padding-right:24px}
+@media(max-width:520px){.ws>.card{min-height:55vh;max-height:72vh}.note-toolbar{align-items:stretch}.note-toolbar>#na,.export-split{flex:1}.export-split>*{flex:1}}
+.toast{position:fixed;z-index:30;bottom:16px;left:50%;transform:translateX(-50%);padding:10px 14px;background:#7e3434;color:#fff;border-radius:6px;display:none;max-width:calc(100vw - 32px)}
+.empty{max-width:620px;margin:12vh auto;text-align:center}
+.player{aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.player iframe{width:100%;height:100%;border:0}
+.player video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
+.local-missing{display:flex;width:100%;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center}
+.tl{position:relative;height:34px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.mk{position:absolute;top:4px;width:8px;height:24px;border-radius:3px;cursor:pointer;transform:translateX(-4px);opacity:.9}
+.mk:hover{transform:translateX(-4px) scaleY(1.15)}
+.head{position:absolute;top:0;bottom:0;width:2px;background:var(--cream)}
+.item{padding:8px 0;border-bottom:1px solid var(--border)}
+.ts{color:var(--yellow);font-weight:700;cursor:pointer;font-variant-numeric:tabular-nums}
+.done{text-decoration:line-through;opacity:.5}
+.bar{height:5px;background:var(--bg);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}
+.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+kbd{background:var(--dark);border-radius:4px;padding:0 5px;font-size:11px}
+</style></head><body><div class="wrap">
+<section class="quick-add" id="dropZone" aria-label="Add a video"><input id="quickUrl" aria-label="VOD link" placeholder="Paste or drop a YouTube / Twitch VOD link"><input id="quickTitle" aria-label="Session title" placeholder="Session title (optional)"><button id="quickAdd">Add VOD</button><button id="localPick" title="Review a video file from this device">Open local video</button><input id="localInput" type="file" accept="video/*,.mkv,.avi" hidden><span class="drop-status" id="dropStatus"></span></section>
+<main id="main"></main><canvas id="inkCanvas" class="ink-canvas" aria-label="Screen drawing overlay"></canvas><div class="ink-tools" role="toolbar" aria-label="Screen tools"><button id="libraryToggle" title="Open library (B)" aria-label="Library"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="4" rx="1"/><rect x="3.5" y="10" width="17" height="4" rx="1"/><rect x="3.5" y="15.5" width="17" height="4" rx="1"/></svg></button><button id="penTool" title="Pen tool (W)" aria-label="Pen"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 20 4.2-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z"/><path d="m14.3 6.7 3 3"/></svg></button><button id="eraserTool" title="Eraser tool (E)" aria-label="Eraser"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H8.5L3.8 15.3a1.5 1.5 0 0 1 0-2.1l8.5-8.5a1.5 1.5 0 0 1 2.1 0l5.4 5.4a1.5 1.5 0 0 1 0 2.1L13.5 18.5"/><path d="M8 20H3"/></svg></button><button id="clearInk" title="Clear all writing" aria-label="Clear all writing"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7"/><path d="M18 7v12.5A1.5 1.5 0 0 1 16.5 21h-9A1.5 1.5 0 0 1 6 19.5V7"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></button></div><div class="scrim" id="scrim"></div><aside class="drawer" id="drawer" aria-label="VOD library"></aside><div class="toast" id="toast" role="alert"></div></div>
+<script>
+let S={vods:[],user:{name:"Player",prefs:{}}},invalidStoredData=false;
+try{const r=localStorage.getItem("vodreview");if(r){const parsed=JSON.parse(r);if(validBackup(parsed))S=parsed;else invalidStoredData=true}}catch(e){invalidStoredData=true}
+S.vods.forEach(v=>{v.comments||=[];delete v.tasks;delete v.goals;delete v.summary;delete v.champion;delete v.role;delete v.result;delete v.patch;delete v.opp;delete v.tags;delete v.status;delete v.completedAt});
+const save=()=>{if(!validBackup(S)){notify("Changes were not saved because the library data is invalid.");return false}try{localStorage.setItem("vodreview",JSON.stringify(S));return true}catch(e){notify("Could not save changes. Export a library backup and free browser storage space.");return false}};
+const $=s=>document.querySelector(s);const uid=()=>Math.random().toString(36).slice(2,10);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=t=>{t=Math.floor(t);const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;return(h?h+":"+String(m).padStart(2,"0"):m)+":"+String(s).padStart(2,"0")};
+const parseT=s=>{const parts=s.trim().split(":");if(parts.length>3||parts.some(x=>!/^\d+$/.test(x)))return NaN;return parts.reduce((total,part)=>total*60+Number(part),0)};
+let rate=1,V=S.vods.find(v=>v.id===S.lastVodId)?.id||S.vods[S.vods.length-1]?.id||null,cur=0,dur=0,playing=false,libraryOpen=false,filt={q:""},toastTimer,localObjectUrl=null,pendingLocalId=null,localDbPromise=null;
+const localFiles=new Map();
+let inkMode=null,inkContext=null,inkBaseCanvas=null,inkBaseContext=null,inkDrawing=false,inkStroke=null,inkDpr=1,inkWidth=0,inkHeight=0,inkActions=[],inkIndex=0;
+const vod=()=>S.vods.find(v=>v.id===V);
+
+function setInkMode(mode){inkMode=inkMode===mode?null:mode;const canvas=$("#inkCanvas");canvas.classList.toggle("active",inkMode!==null);canvas.classList.toggle("erase",inkMode==="erase");$("#penTool").classList.toggle("on",inkMode==="pen");$("#eraserTool").classList.toggle("on",inkMode==="erase");$("#penTool").setAttribute("aria-pressed",String(inkMode==="pen"));$("#eraserTool").setAttribute("aria-pressed",String(inkMode==="erase"))}
+function drawInkAction(ctx,action){if(!action.points.length)return;ctx.globalCompositeOperation=action.tool==="erase"?"destination-out":"source-over";ctx.strokeStyle=action.color;ctx.lineWidth=action.width;ctx.lineCap="round";ctx.lineJoin="round";ctx.beginPath();ctx.moveTo(action.points[0].x,action.points[0].y);if(action.points.length===1)ctx.lineTo(action.points[0].x+.1,action.points[0].y+.1);else action.points.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));ctx.stroke()}
+function renderInk(){if(!inkContext||!inkBaseCanvas)return;inkContext.globalCompositeOperation="source-over";inkContext.clearRect(0,0,inkWidth,inkHeight);inkContext.drawImage(inkBaseCanvas,0,0,inkWidth,inkHeight);for(let i=0;i<inkIndex;i++)drawInkAction(inkContext,inkActions[i]);if(inkStroke)drawInkAction(inkContext,inkStroke);inkContext.globalCompositeOperation="source-over"}
+function resizeInkCanvas(){const canvas=$("#inkCanvas"),old=inkBaseCanvas;inkDpr=window.devicePixelRatio||1;inkWidth=window.innerWidth;inkHeight=window.innerHeight;canvas.width=Math.round(inkWidth*inkDpr);canvas.height=Math.round(inkHeight*inkDpr);inkBaseCanvas=document.createElement("canvas");inkBaseCanvas.width=canvas.width;inkBaseCanvas.height=canvas.height;inkContext=canvas.getContext("2d");inkBaseContext=inkBaseCanvas.getContext("2d");inkContext.setTransform(inkDpr,0,0,inkDpr,0,0);inkBaseContext.setTransform(inkDpr,0,0,inkDpr,0,0);if(old)inkBaseContext.drawImage(old,0,0,inkWidth,inkHeight);renderInk()}
+function commitInkAction(action){if(inkIndex<inkActions.length)inkActions.splice(inkIndex);inkActions.push(action);inkIndex=inkActions.length;if(inkActions.length>100){const committed=inkActions.shift();inkIndex--;drawInkAction(inkBaseContext,committed)}renderInk()}
+function undoInk(){if(inkIndex===0)return;inkIndex--;renderInk()}
+function redoInk(){if(inkIndex>=inkActions.length)return;inkIndex++;renderInk()}
+function clearInk(){inkDrawing=false;inkStroke=null;inkActions=[];inkIndex=0;inkBaseContext?.clearRect(0,0,inkWidth,inkHeight);renderInk()}
+function positionInkTools(){const bar=document.querySelector(".ink-tools");if(!bar)return;const player=$("#pl");if(!player){bar.style.top="50%";return}const rect=player.getBoundingClientRect();const half=bar.offsetHeight/2;const mid=rect.top+rect.height/2;const top=Math.min(Math.max(mid,half+8),window.innerHeight-half-8);bar.style.top=top+"px"}
+function initInkTools(){const canvas=$("#inkCanvas");resizeInkCanvas();window.addEventListener("resize",()=>{resizeInkCanvas();positionInkTools()});window.addEventListener("scroll",positionInkTools,{passive:true});$("#penTool").onclick=()=>setInkMode("pen");$("#eraserTool").onclick=()=>setInkMode("erase");$("#clearInk").onclick=clearInk;canvas.addEventListener("pointerdown",e=>{if(!inkMode||e.button!==0)return;e.preventDefault();inkDrawing=true;canvas.setPointerCapture(e.pointerId);inkStroke={tool:inkMode,color:"#ffffff",width:inkMode==="erase"?28:3,points:[{x:e.clientX,y:e.clientY}]};renderInk()});canvas.addEventListener("pointermove",e=>{if(!inkDrawing||!inkStroke)return;const point={x:e.clientX,y:e.clientY},last=inkStroke.points[inkStroke.points.length-1];if(Math.hypot(point.x-last.x,point.y-last.y)<1)return;inkStroke.points.push(point);const erase=inkContext.globalCompositeOperation;drawInkAction(inkContext,inkStroke);inkContext.globalCompositeOperation=erase});const stop=()=>{if(!inkDrawing)return;inkDrawing=false;if(inkStroke)commitInkAction(inkStroke);inkStroke=null};canvas.addEventListener("pointerup",stop);canvas.addEventListener("pointercancel",stop);canvas.addEventListener("lostpointercapture",stop)}
+
+function parseUrl(u){try{const raw=u.trim(),x=new URL(/^[a-z][a-z\d+.-]*:\/\//i.test(raw)?raw:"https://"+raw),h=x.hostname.toLowerCase();let id;
+ if(["youtube.com","www.youtube.com","m.youtube.com","youtu.be","www.youtu.be"].includes(h)){id=h.includes("youtu.be")?x.pathname.split("/")[1]:x.searchParams.get("v")||x.pathname.match(/\/(?:embed|shorts|live)\/([\w-]{11})/)?.[1];return id&&/^[\w-]{11}$/.test(id)?{platform:"YouTube",vid:id}:null}
+ if(["twitch.tv","www.twitch.tv"].includes(h)){id=x.pathname.match(/^\/videos\/(\d+)/)?.[1];return id?{platform:"Twitch",vid:id}:null}
+ }catch(e){}return null}
+function validBackup(data){const safeId=x=>typeof x==="string"&&/^[\w-]{1,40}$/.test(x);return !!data&&Array.isArray(data.vods)&&data.vods.every(v=>{const parsed=parseUrl(v?.url||"");return v&&safeId(v.id)&&typeof v.title==="string"&&(v.platform==="Local"?typeof v.fileName==="string":parsed?.platform===v.platform&&parsed?.vid===v.vid)&&Array.isArray(v.comments)&&v.comments.every(x=>x&&safeId(x.id)&&Number.isFinite(x.ts)&&typeof x.text==="string")})}
+function localHandleDb(){if(!localDbPromise)localDbPromise=new Promise((resolve,reject)=>{if(!window.indexedDB){reject(Error("IndexedDB unavailable"));return}const request=indexedDB.open("vodreview-local-handles",1);request.onupgradeneeded=()=>request.result.createObjectStore("handles");request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)});return localDbPromise}
+async function storeLocalHandle(id,handle){const db=await localHandleDb();return new Promise((resolve,reject)=>{const tx=db.transaction("handles","readwrite");tx.objectStore("handles").put(handle,id);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})}
+async function readLocalHandle(id){const db=await localHandleDb();return new Promise((resolve,reject)=>{const request=db.transaction("handles").objectStore("handles").get(id);request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error)})}
+async function deleteLocalHandle(id){try{const db=await localHandleDb();db.transaction("handles","readwrite").objectStore("handles").delete(id)}catch(e){}}
+function isVideoFile(file){return !!file&&(file.type.startsWith("video/")||/\.(mp4|m4v|webm|ogv|ogg|mov|mkv|avi)$/i.test(file.name))}
+async function createLocalVod(file,handle){if(!isVideoFile(file)){notify("Choose a video file to start a local review.");return}const title=$("#quickTitle").value.trim()||file.name,id=uid(),item={id,platform:"Local",fileName:file.name,title,createdAt:Date.now(),comments:[]};if(handle){try{await storeLocalHandle(id,handle)}catch(e){notify("This browser can review the file now, but may ask you to select it again next time.")}}localFiles.set(id,file);S.vods.push(item);V=id;S.lastVodId=id;save();$("#quickTitle").value="";$("#dropStatus").textContent="";setLibrary(false);go()}
+async function pickLocalVod(){if(!window.showOpenFilePicker){$("#localInput").click();return}try{const [handle]=await showOpenFilePicker({multiple:false,types:[{description:"Video files",accept:{"video/mp4":[".mp4",".m4v"],"video/webm":[".webm"],"video/ogg":[".ogv",".ogg"],"video/quicktime":[".mov"],"video/x-matroska":[".mkv"],"video/x-msvideo":[".avi"]}}]});await createLocalVod(await handle.getFile(),handle)}catch(e){if(e.name!=="AbortError"){notify("This browser could not open the advanced picker; use the standard file picker instead.");$("#localInput").click()}}}
+async function selectedLocalFile(file){if(!file)return;if(!isVideoFile(file)){notify("Choose a video file to start a local review.");return}if(pendingLocalId){const v=S.vods.find(x=>x.id===pendingLocalId);pendingLocalId=null;if(v){localFiles.set(v.id,file);v.fileName=file.name;save();showLocalVideo(v,file)}return}await createLocalVod(file,null)}
+async function reselectLocalFile(v){if(window.showOpenFilePicker){try{const [handle]=await showOpenFilePicker({multiple:false,types:[{description:"Video files",accept:{"video/mp4":[".mp4",".m4v"],"video/webm":[".webm"],"video/ogg":[".ogv",".ogg"],"video/quicktime":[".mov"],"video/x-matroska":[".mkv"],"video/x-msvideo":[".avi"]}}]});const file=await handle.getFile();if(!isVideoFile(file)){notify("Choose a video file to resume this review.");return}try{await storeLocalHandle(v.id,handle)}catch(e){notify("The file is open, but this browser may ask you to select it again next time.")}localFiles.set(v.id,file);v.fileName=file.name;save();showLocalVideo(v,file)}catch(e){if(e.name!=="AbortError"){notify("Use the standard file picker to continue.");pendingLocalId=v.id;$("#localInput").click()}}return}pendingLocalId=v.id;$("#localInput").click()}
+async function reopenLocalVod(v){let file=localFiles.get(v.id);if(!file){let handle;try{handle=await readLocalHandle(v.id);if(handle){const permission=await handle.queryPermission({mode:"read"});if(permission==="granted")file=await handle.getFile();else{showLocalFilePrompt(v,true);return}}}catch(e){if(handle){showLocalFilePrompt(v,true);return}}if(!handle){showLocalFilePrompt(v,false);return}}
+ if(file){localFiles.set(v.id,file);showLocalVideo(v,file)}else showLocalFilePrompt(v,false)}
+function showLocalFilePrompt(v,hasHandle){const p=$("#pl");p.innerHTML=`<div class="local-missing"><strong>${esc(v.fileName)}</strong><span class="muted">${hasHandle?"Reopen this saved file. Your browser may ask you to allow access.":"Select this video again to resume your review."}</span>${hasHandle?'<button id="allowLocal">Open saved file</button>':''}<button id="reselectLocal">Choose video file</button></div>`;if(hasHandle)$("#allowLocal").onclick=async()=>{try{const handle=await readLocalHandle(v.id);if(!handle){showLocalFilePrompt(v,false);return}const permission=await handle.requestPermission({mode:"read"});if(permission!=="granted"){notify("Access was not granted. Choose the file again to resume.");return}const file=await handle.getFile();localFiles.set(v.id,file);showLocalVideo(v,file)}catch(e){notify("Could not reopen that file. Choose it again to continue.")}};$("#reselectLocal").onclick=()=>reselectLocalFile(v)}
+function showLocalVideo(v,file){const p=$("#pl");if(!p)return;if(localObjectUrl)URL.revokeObjectURL(localObjectUrl);localObjectUrl=URL.createObjectURL(file);p.innerHTML='<video id="local-video" controls playsinline></video>';const video=$("#local-video");video.src=localObjectUrl;video.addEventListener("loadedmetadata",()=>{dur=Number.isFinite(video.duration)?video.duration:0;tl()});video.addEventListener("timeupdate",()=>{cur=video.currentTime;showT()});video.addEventListener("play",()=>{playing=true;updCtl()});video.addEventListener("pause",()=>{playing=false;updCtl()});video.addEventListener("ratechange",()=>{rate=video.playbackRate;updCtl()});video.addEventListener("error",()=>notify("This browser cannot play this video format or codec. Try MP4 or WebM."));video.load()}
+function notify(message){const el=$("#toast");if(!el)return;el.textContent=message;el.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display="none",6000)}
+if(invalidStoredData)notify("Saved library data could not be read. Import a backup if available.");
+function download(name,content,type){const url=URL.createObjectURL(new Blob([content],{type})),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportSessionNotes(){const v=vod(),source=v.platform==="Local"?v.fileName:v.url,notes=[...v.comments].sort((a,b)=>a.ts-b.ts),rows=notes.map(n=>({timestamp:fmt(n.ts),seconds:n.ts,createdAt:new Date(n.createdAt||Date.now()).toISOString(),note:n.text}));let body,type,ext;
+ if(noteFormat==="json"){body=JSON.stringify({session:v.title,url:source,notes:rows},null,2);type="application/json";ext="json"}
+ else if(noteFormat==="csv"){const quote=x=>{let value=String(x??"");if(/^[=+\-@\t\r]/.test(value))value="'"+value;return'"'+value.replace(/"/g,'""')+'"'};body=["timestamp,seconds,createdAt,note",...rows.map(r=>[r.timestamp,r.seconds,r.createdAt,r.note].map(quote).join(","))].join("\r\n");type="text/csv;charset=utf-8";ext="csv"}
+ else if(noteFormat==="md"){body=`# ${v.title}\n\nVOD: ${source}\n\n${rows.map(r=>`## ${r.timestamp}\n\n${r.note}`).join("\n\n")}\n`;type="text/markdown;charset=utf-8";ext="md"}
+ else{body=`${v.title}\n${source}\n\n${rows.map(r=>`[${r.timestamp}] ${r.note}`).join("\n\n")}\n`;type="text/plain;charset=utf-8";ext="txt"}
+ const safe=(v.title||"vod").replace(/[^a-z0-9_-]+/gi,"-").replace(/^-|-$/g,"").slice(0,60)||"vod";download(`${safe}-notes.${ext}`,body,type)}
+function nav(){$("#libraryToggle").onclick=()=>setLibrary(!libraryOpen);$("#scrim").onclick=()=>setLibrary(false);$("#quickAdd").onclick=()=>addVod($("#quickUrl").value,$("#quickTitle").value);$("#quickUrl").onkeydown=e=>{if(e.key==="Enter")addVod(e.target.value,$("#quickTitle").value)};const zone=$("#dropZone");zone.ondragover=e=>{e.preventDefault();zone.classList.add("drop-active")};zone.ondragleave=()=>zone.classList.remove("drop-active");zone.ondrop=e=>{e.preventDefault();zone.classList.remove("drop-active");const file=e.dataTransfer.files?.[0];if(file){selectedLocalFile(file);return}const text=(e.dataTransfer.getData("text/uri-list")||e.dataTransfer.getData("text/plain")).split(/\r?\n/).find(x=>x&&!x.startsWith("#"))||"";$("#quickUrl").value=text;$("#dropStatus").textContent=text?"Link ready":"No video link found"}}
+function bindLocalPicker(){$("#localPick").onclick=pickLocalVod;$("#localInput").onchange=e=>{selectedLocalFile(e.target.files[0]);e.target.value=""}}
+function setLibrary(open){libraryOpen=open;$("#drawer").classList.toggle("open",open);$("#scrim").classList.toggle("open",open);$("#libraryToggle").setAttribute("aria-expanded",String(open))}
+function go(){if(!validBackup(S)){S={vods:[],user:{name:"Player",prefs:{}}};V=null;notify("Invalid library data was not loaded. Import a valid backup to restore it.")}if(S.lastVodId!==V){S.lastVodId=V;save()}ws();lib();setLibrary(libraryOpen)}
+
+function card(v){return`<div class="card click" data-v="${v.id}"><div class="row"><span class="tile">${v.platform==="Local"?"FILE":v.platform==="YouTube"?"YT":"TW"}</span><b style="color:var(--cream)">${esc(v.title)}</b><button class="x" data-rm="${v.id}" title="Delete VOD">✕</button></div></div>`}
+function bindCards(){$("#drawer").querySelectorAll("[data-v]").forEach(c=>c.onclick=()=>{V=c.dataset.v;cur=0;dur=0;S.lastVodId=V;save();setLibrary(false);go()});$("#drawer").querySelectorAll("[data-rm]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(!confirm("Delete this VOD and all of its notes?"))return;S.vods=S.vods.filter(v=>v.id!==b.dataset.rm);deleteLocalHandle(b.dataset.rm);if(V===b.dataset.rm)V=S.vods[S.vods.length-1]?.id||null;S.lastVodId=V;save();go()})}
+function addVod(url,title){const p=parseUrl(url);if(!p){notify("Use a YouTube or Twitch VOD link.");return false}const normalized=/^[a-z][a-z\d+.-]*:\/\//i.test(url.trim())?url.trim():"https://"+url.trim(),customTitle=title.trim(),item={id:uid(),...p,url:normalized,title:customTitle||`${p.platform} VOD ${p.vid}`,createdAt:Date.now(),comments:[]};S.vods.push(item);V=item.id;S.lastVodId=V;save();$("#quickUrl").value="";$("#quickTitle").value="";$("#dropStatus").textContent="";setLibrary(false);go();if(!customTitle)resolveVideoTitle(item);return true}
+async function resolveVideoTitle(item){const endpoint=item.platform==="YouTube"?"https://www.youtube.com/oembed?url=":"https://www.twitch.tv/oembed?url=";try{const response=await fetch(endpoint+encodeURIComponent(item.url)+"&format=json");if(!response.ok)return;const data=await response.json();if(typeof data.title!=="string"||!data.title.trim()||!S.vods.some(v=>v.id===item.id))return;item.title=data.title.trim();save();if(V===item.id){const heading=$("#main h2");if(heading)heading.textContent=item.title}const title=$("#drawer [data-v=\""+item.id+"\"] b");if(title)title.textContent=item.title;lib()}catch(e){}}
+function lib(){const f=filt,d=$("#drawer");
+ d.innerHTML=`<div class="row sec"><h2 class="grow" style="margin:0">Library</h2><button id="drawerAdd">Add VOD</button><button id="closeLibrary" class="x" title="Close library">✕</button></div><div class="row sec"><button id="backup" title="Download all VODs and review data as JSON">Export backup</button><label class="muted">Import backup <input type="file" id="restore" accept="application/json,.json" style="width:180px"></label></div><div class="row sec"><input class="grow" id="q" placeholder="Search sessions…" value="${esc(f.q)}"></div><div class="grid" id="vg"></div>`;
+ const draw=()=>{const q=f.q.toLowerCase(),L=S.vods.filter(v=>!q||v.title.toLowerCase().includes(q));$("#vg").innerHTML=L.map(card).join("")||'<div class="muted">No VODs match.</div>';bindCards()};draw();
+ $("#closeLibrary").onclick=()=>setLibrary(false);$("#drawerAdd").onclick=()=>{setLibrary(false);$("#quickUrl").focus()};
+ $("#q").oninput=e=>{f.q=e.target.value;draw()};
+ $("#backup").onclick=()=>download("vodreview-backup.json",JSON.stringify(S,null,2),"application/json");
+ $("#restore").onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!validBackup(data))throw Error("Invalid backup");if(!confirm(`Replace your library with ${data.vods.length} sessions?`))return;S=data;S.vods.forEach(v=>{delete v.tasks;delete v.goals;delete v.summary;delete v.champion;delete v.role;delete v.result;delete v.patch;delete v.opp;delete v.tags;delete v.status;delete v.completedAt});V=S.vods.find(v=>v.id===S.lastVodId)?.id||S.vods[S.vods.length-1]?.id||null;S.lastVodId=V;save();go()}catch(err){notify("That backup file is invalid or unreadable.")}finally{e.target.value=""}}
+ }
+
+// ---- Workspace ----
+let twitchPlayer=null,twitchReady=false,twitchTimer=null,twitchApiPromise=null,noteFormat="txt";
+function ws(){const v=vod();if(!v){$("#main").innerHTML=`<section class="empty"><h2>Start a VOD review</h2><p class="muted">Paste or drop a YouTube or Twitch VOD link into the bar above.</p></section>`;positionInkTools();return}if(!/^[a-z][a-z\d+.-]*:\/\//i.test(v.url))v.url="https://"+v.url;
+ $("#main").innerHTML=`<div class="row" style="margin-bottom:10px"><h2 style="margin:0" class="grow">${esc(v.title)}</h2></div>
+ <div class="ws"><div><div class="player" id="pl"></div>
+ <div class="row" style="margin-top:8px"><button id="pp" title="Play / Pause (Space)" style="width:40px">▶</button><button id="bk" title="Seek back 5 seconds (←)">−5s</button><button id="fw" title="Seek forward 5 seconds (→)">+5s</button>${(v.platform==="YouTube"?[.5,.75,1,1.5,2]:v.platform==="Local"?[.5,1,1.5,2,3]:[]).map((s,i)=>`<button data-sp="${s}" title="Playback speed ${s}× (key ${i+1})">${s}×</button>`).join("")}${v.platform==="Twitch"?'<span class="muted">Twitch playback speed is not available</span>':v.platform==="Local"?'':'<a class="muted" target="_blank" rel="noopener" href="'+esc(v.url)+'">Open on YouTube ↗</a>'}<span class="muted">Time</span><input id="ct" title="Current time. Type a time like 12:43 and press Enter to jump." style="width:80px" value="0:00"></div>
+ <div class="tl" id="tl" title="Review timeline. Click to seek, or click a marker to jump to that note."></div>
+ <div class="muted"><kbd>Space</kbd> play · <kbd>N</kbd> note · <kbd>B</kbd> library · <kbd>←</kbd><kbd>→</kbd> seek${v.platform==="YouTube"?" · <kbd>1–5</kbd> speed":""}</div></div>
+ <div class="card"><div id="panel"></div></div></div>`;
+ $("#pp").onclick=toggle;$("#bk").onclick=()=>seek(cur-5);$("#fw").onclick=()=>seek(cur+5);
+ document.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>speed(+b.dataset.sp));
+ $("#ct").onchange=e=>{const t=parseT(e.target.value);if(Number.isFinite(t))seek(t);else{notify("Enter a time as mm:ss or hh:mm:ss.");showT(true)}};rate=1;playing=false;updCtl();
+ loadPlayer(0);panel();tl();positionInkTools()}
+const host=()=>location.hostname||"localhost";
+function loadPlayer(t){const v=vod(),p=$("#pl");clearInterval(twitchTimer);twitchPlayer=null;twitchReady=false;if(localObjectUrl){URL.revokeObjectURL(localObjectUrl);localObjectUrl=null}
+ if(v.platform==="Local"){p.innerHTML='<video id="local-video" controls playsinline></video>';reopenLocalVod(v);return}
+ if(v.platform==="YouTube"){p.innerHTML=`<iframe id="fr" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen src="https://www.youtube.com/embed/${v.vid}?enablejsapi=1&playsinline=1&start=${Math.floor(t)}${/^https?:/.test(location.origin)?"&origin="+encodeURIComponent(location.origin):""}"></iframe>`;$("#fr").onload=()=>post({event:"listening"});return}
+ p.innerHTML='<div id="twitch-player" style="width:100%;height:100%"></div>';
+ if(!twitchApiPromise)twitchApiPromise=new Promise((resolve,reject)=>{if(window.Twitch?.Player){resolve();return}const s=document.createElement("script");s.src="https://player.twitch.tv/js/embed/v1.js";s.onload=resolve;s.onerror=reject;document.head.appendChild(s)});
+ twitchApiPromise.then(()=>{if(!$("#twitch-player")||vod()?.id!==v.id)return;const time=`${Math.floor(t/3600)}h${Math.floor(t%3600/60)}m${Math.floor(t%60)}s`;twitchPlayer=new Twitch.Player("twitch-player",{width:"100%",height:"100%",video:"v"+v.vid,parent:[host()],autoplay:false,time});
+  twitchPlayer.addEventListener(Twitch.Player.READY,()=>{twitchReady=true;if(t>0)twitchPlayer.seek(t);playing=false;updCtl();twitchTimer=setInterval(()=>{try{const now=twitchPlayer.getCurrentTime(),length=twitchPlayer.getDuration();if(Number.isFinite(now)){cur=now;showT()}if(Number.isFinite(length)&&length>0&&length!==dur){dur=length;tl()}}catch(e){}},500)});
+  twitchPlayer.addEventListener(Twitch.Player.PLAY,()=>{playing=true;updCtl()});twitchPlayer.addEventListener(Twitch.Player.PAUSE,()=>{playing=false;updCtl()})
+ }).catch(()=>notify("Twitch player could not load. Check your connection and try again."))}
+function post(o){const f=$("#fr");if(f&&f.contentWindow)f.contentWindow.postMessage(JSON.stringify(o),"https://www.youtube.com")}
+function cmd(fn,args=[]){post({event:"command",func:fn,args})}
+addEventListener("message",e=>{let origin;try{origin=new URL(e.origin).hostname}catch(x){return}if(!/youtube\.com$/.test(origin))return;let d;try{d=JSON.parse(e.data)}catch(x){return}
+ const i=d.info;if(!i)return;if(i.currentTime!=null){cur=i.currentTime;showT()}
+ if(i.duration&&i.duration!==dur){dur=i.duration;tl()}if(i.playerState!=null){playing=i.playerState===1;updCtl()}if(i.playbackRate){rate=i.playbackRate;updCtl()}});
+function seek(t){t=Math.max(0,t);cur=t;const v=vod();if(!v)return;if(v.platform==="YouTube")cmd("seekTo",[t,true]);else if(v.platform==="Local"&&$("#local-video"))$("#local-video").currentTime=t;else if(twitchPlayer&&twitchReady)twitchPlayer.seek(t);showT(true)}
+function showT(force){const c=$("#ct");if(c&&(force||document.activeElement!==c))c.value=fmt(cur);const n=$("#nts");if(n)n.textContent=fmt(cur);moveHead()}
+function updCtl(){const b=$("#pp");if(b)b.textContent=playing?"⏸":"▶";document.querySelectorAll("[data-sp]").forEach(x=>x.classList.toggle("on",+x.dataset.sp===rate))}
+function toggle(){const v=vod();if(v.platform==="YouTube"){cmd(playing?"pauseVideo":"playVideo");playing=!playing;updCtl()}else if(v.platform==="Local"&&$("#local-video")){const video=$("#local-video");if(playing)video.pause();else video.play().catch(()=>notify("Press play in the video player to begin playback."))}else if(twitchPlayer&&twitchReady){if(playing)twitchPlayer.pause();else twitchPlayer.play()}}
+function speed(s){const v=vod();if(v?.platform==="Local"&&$("#local-video")){$("#local-video").playbackRate=s;rate=s;updCtl();return}if(v?.platform!=="YouTube")return;rate=s;cmd("setPlaybackRate",[s]);updCtl()}
+function span(){const v=vod(),m=Math.max(0,...v.comments.map(x=>x.ts||0));return dur||Math.max(600,m*1.1)}
+function tl(){const el=$("#tl");if(!el)return;const v=vod(),D=span();
+ const ev=v.comments.map(c=>({ts:c.ts,c:"#4a86b8",t:`${fmt(c.ts)}: ${c.text}`}));
+ el.innerHTML=ev.map(e=>`<div class="mk" data-t="${e.ts}" style="left:${e.ts/D*100}%;background:${e.c}" title="${esc(e.t)}"></div>`).join("")+'<div class="head" id="hd"></div>';
+ el.querySelectorAll(".mk").forEach(m=>m.onclick=()=>seek(+m.dataset.t));
+ el.onclick=e=>{if(e.target===el||e.target.id==="hd")seek((e.offsetX/el.clientWidth)*D)};moveHead()}
+function moveHead(){const h=$("#hd");if(h)h.style.left=Math.min(100,cur/span()*100)+"%"}
+const P={notes(v){const L=[...v.comments].sort((a,b)=>a.ts-b.ts);return`<h3>Session Notes</h3><div class="note-list">${L.map(c=>`<div class="item note-entry" data-note-row="${c.id}"><div class="note-view"><span class="ts" data-s="${c.ts}">${fmt(c.ts)}</span><span class="note-text">${esc(c.text)}</span><div class="note-actions"><button class="x" data-e="${c.id}">Edit</button><button class="x" data-d="${c.id}" title="Delete note">✕</button></div></div></div>`).join("")||'<div class="muted">No notes yet.</div>'}</div><div class="note-compose"><div class="row"><span class="ts" id="nts">${fmt(cur)}</span><span class="muted">current timestamp</span></div><textarea id="nt" placeholder="Add a note at this timestamp"></textarea><div class="note-toolbar"><button id="na" title="Add note (Enter)">Add note</button><div class="export-split"><button id="exportNotes" title="Export every note in this session">Export notes</button><select id="noteFormat" aria-label="Export format"><option value="txt" ${noteFormat==="txt"?"selected":""}>TXT</option><option value="md" ${noteFormat==="md"?"selected":""}>Markdown</option><option value="json" ${noteFormat==="json"?"selected":""}>JSON</option><option value="csv" ${noteFormat==="csv"?"selected":""}>CSV</option></select></div></div></div>`}};
+function panel(){const v=vod(),p=$("#panel");if(!v||!p)return;p.innerHTML=P.notes(v);
+ p.querySelectorAll("[data-s]").forEach(e=>e.onclick=()=>seek(+e.dataset.s));
+ const wr=()=>{const oldList=$("#panel .note-list"),scrollTop=oldList?.scrollTop||0;save();panel();tl();const newList=$("#panel .note-list");if(newList)newList.scrollTop=scrollTop};
+ const nf=$("#noteFormat");nf.onchange=()=>noteFormat=nf.value;$("#exportNotes").onclick=exportSessionNotes;
+ p.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{const i=v.comments.findIndex(x=>x.id===b.dataset.d);if(i>=0)v.comments.splice(i,1);wr()});
+ p.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>{const note=v.comments.find(x=>x.id===b.dataset.e),row=b.closest("[data-note-row]");if(!note||!row)return;row.innerHTML=`<div class="note-edit"><textarea class="note-editor">${esc(note.text)}</textarea><div class="row"><button data-save-note>Save</button><button data-cancel-note>Cancel</button></div></div>`;const editor=row.querySelector(".note-editor"),saveEdit=()=>{const text=editor.value.trim();if(!text)return;note.text=text;note.updatedAt=Date.now();wr()};row.querySelector("[data-save-note]").onclick=saveEdit;row.querySelector("[data-cancel-note]").onclick=()=>panel();editor.onkeydown=e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey))saveEdit();if(e.key==="Escape")panel()};editor.focus()});
+ const addNote=()=>{const t=$("#nt").value.trim();if(!t)return;v.comments.push({id:uid(),ts:cur,text:t,createdAt:Date.now(),updatedAt:Date.now()});wr()};
+ $("#na").onclick=addNote;$("#nt").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();addNote()}}}
+addEventListener("keydown",e=>{const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable,k=e.key.toLowerCase(),modifier=e.ctrlKey||e.metaKey;if(modifier&&!typing&&!e.altKey&&k==="e"){e.preventDefault();clearInk();return}if(modifier&&!typing&&!e.altKey&&(k==="z"||k==="y")){e.preventDefault();if(k==="y"||e.shiftKey)redoInk();else undoInk();return}if(typing||modifier||e.altKey)return;
+ if(k==="w"){e.preventDefault();setInkMode("pen");return}if(k==="e"){e.preventDefault();setInkMode("erase");return}if(k==="b"){e.preventDefault();setLibrary(!libraryOpen);return}if(!vod())return;
+ if(k===" "){e.preventDefault();toggle()}else if(k==="n"){e.preventDefault();$("#nt").focus()}
+ else if(k==="arrowleft")seek(cur-5);else if(k==="arrowright")seek(cur+5);else if(vod().platform==="YouTube"&&"12345".includes(k))speed([.5,.75,1,1.5,2][+k-1])});
+nav();bindLocalPicker();initInkTools();go();
+</script></body></html>
