@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saberkratia's CPS Trainer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <a class="icon-widget" href="../" aria-label="Visit saberkratia.com">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <path d="M12 3c2.6 2.6 4 5.7 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.7-4-9s1.4-6.4 4-9z"></path>
+      </svg>
+    </a>
+    <a class="icon-widget twitch-link" href="https://www.twitch.tv/saberkratia" target="_blank" rel="noopener noreferrer" aria-label="Twitch">
+      <img src="twitch.png" alt="Watch me on Twitch">
+      <span class="live-badge" aria-hidden="true">LIVE</span>
+    </a>
+    <h1>Saberkratia's CPS Trainer</h1>
+  </header>
+
+  <main>
+
+    <div class="top-row">
+
+      <section class="panel click-panel">
+
+        <div class="row">
+          <label for="duration">Duration:</label>
+          <select id="duration">
+            <option value="5">5s</option>
+            <option value="10">10s</option>
+            <option value="30">30s</option>
+            <option value="60">60s</option>
+          </select>
+          <select id="clickMode">
+            <label for="clickMode">Click:</label>
+            <option value="left">Left click</option>
+            <option value="right">Right click</option>
+          </select>
+
+          <button id="startBtn">Start (Space)</button>
+          <button id="cancelBtn">Cancel (Backspace)</button>
+        </div>
+
+        <div id="clickZone" class="click-zone" tabindex="0">
+          <div id="statusText">Press Start, then click here as fast as you can</div>
+          <div id="statLine" class="stat-line"></div>
+        </div>
+
+      </section>
+
+      <div class="side-column">
+
+        <section class="panel metronome-panel">
+
+          <h2>Metronome</h2>
+
+          <div class="row">
+            <button id="metronomeToggle">Start Metronome</button>
+
+            <label for="bpmInput">BPM:</label>
+            <input type="number" id="bpmInput" min="300" max="600" value="400">
+
+            <input type="range" id="bpmSlider" min="300" max="600" value="400">
+
+            <span id="bpsIndicator" class="bps-indicator"></span>
+          </div>
+
+          <div class="row">
+            <label for="volumeSlider">Volume:</label>
+            <input type="range" id="volumeSlider" min="0" max="100" value="40">
+          </div>
+
+          <div class="row">
+            <label for="metronomePlayDuringClick">
+              <input type="checkbox" id="metronomePlayDuringClick" checked>
+              Play during clicking
+            </label>
+          </div>
+
+        </section>
+
+        <section class="panel rest-timer-panel">
+
+          <h2>Rest Timer</h2>
+
+          <div class="row">
+            <label for="restDurationInput">Duration (s):</label>
+            <input type="number" id="restDurationInput" min="1" value="30">
+
+            <button id="restStartBtn">▶</button>
+            <button id="restResetBtn">⭮</button>
+          </div>
+
+          <div id="restTimeDisplay" class="rest-time-display">0:30</div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+    <section class="panel">
+
+      <h2 id="graphTitle">Progress</h2>
+      <canvas id="scoreChart" width="800" height="360"></canvas>
+
+      <div class="row">
+        <button id="exportBtn">Export Scores</button>
+        <button id="importBtn">Import Scores</button>
+        <input type="file" id="importFile" accept="application/json" hidden>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="script.js"></script>
+<script src="../twitch-status.js" defer></script>
+</body>
+</html>

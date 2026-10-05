@@ -1,0 +1,374 @@
+:root {
+  --bg: #171B24;
+  --card: #202633;
+  --white: #E4D9D5;
+  --muted: rgba(228, 217, 213, 0.58);
+  --border: rgba(228, 217, 213, 0.13);
+  --cream: #FDE3BA;
+  --yellow: #F4D17D;
+  --blue: #1F5E8D;
+  --indigo: #414A84;
+  --dark: #393F4E;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--white);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 24px 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.icon-widget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  background: var(--indigo);
+  border-radius: 8px;
+  color: var(--white);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.icon-widget:hover {
+  background: var(--blue);
+  transform: translateY(-2px);
+}
+
+.icon-widget img {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 24px 48px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--yellow);
+}
+
+.top-row {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.click-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 300px;
+}
+
+.click-panel > .row {
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.click-panel > .row button {
+  padding: 6px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.click-panel > .row select {
+  flex: 0 0 auto;
+  padding: 6px 7px;
+  font-size: 12px;
+}
+
+.click-panel > .row #duration {
+  width: 54px;
+}
+
+.click-panel > .row #clickMode {
+  width: 100px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+select, input[type="number"] {
+  background: var(--bg);
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+input[type="number"] {
+  width: 80px;
+}
+
+input[type="range"] {
+  flex: 1;
+  min-width: 150px;
+  accent-color: var(--blue);
+}
+
+button {
+  background: var(--card);
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+button:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  transform: translateY(-1px);
+}
+
+button.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--cream);
+}
+
+.click-zone {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 60px 20px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s ease;
+}
+
+.click-zone:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+#statusText {
+  font-size: 18px;
+  color: var(--white);
+}
+
+.stat-line {
+  margin-top: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+canvas {
+  background: transparent;
+  max-width: 100%;
+}
+
+.side-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 280px;
+  flex: 0 0 auto;
+}
+
+.metronome-panel,
+.rest-timer-panel {
+  padding: 14px 16px;
+}
+
+.metronome-panel h2,
+.rest-timer-panel h2 {
+  font-size: 12px;
+  margin: 0 0 10px;
+}
+
+.metronome-panel .row,
+.rest-timer-panel .row {
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.metronome-panel button,
+.rest-timer-panel button {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.metronome-panel label,
+.rest-timer-panel label {
+  font-size: 12px;
+}
+
+.metronome-panel input[type="number"],
+.rest-timer-panel input[type="number"] {
+  width: 55px;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.metronome-panel input[type="range"] {
+  min-width: 100px;
+}
+
+.metronome-panel label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.metronome-panel input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--blue);
+}
+
+.rest-time-display {
+  margin-top: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--cream);
+}
+
+.bps-indicator {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  header {
+    padding: 20px 16px 0;
+  }
+
+  main {
+    padding: 16px 16px 36px;
+  }
+
+  .side-column {
+    width: 100%;
+  }
+
+  .click-zone {
+    padding: 40px 16px;
+  }
+
+  .click-panel > .row {
+    flex-wrap: wrap;
+  }
+}
+
+.twitch-link {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.twitch-link > * {
+  position: relative;
+  z-index: 1;
+}
+
+.live-badge {
+  display: none;
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  padding: 1px 3px;
+  background: #d94242;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 0.45rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.twitch-link.is-live {
+  box-shadow: 0 0 0 1px #d94242, 0 0 14px rgba(217, 66, 66, 0.3);
+}
+
+.twitch-link.is-live .live-badge {
+  display: inline-block;
+}
+
+.twitch-link.is-live::after {
+  position: absolute;
+  z-index: 0;
+  top: -50%;
+  bottom: -50%;
+  left: -45%;
+  width: 28%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  content: "";
+  pointer-events: none;
+  transform: skewX(-20deg);
+  animation: twitch-shine 2.8s ease-in-out infinite;
+}
+
+@keyframes twitch-shine {
+  0%, 35% { left: -45%; }
+  75%, 100% { left: 125%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .twitch-link.is-live::after {
+    animation: none;
+  }
+}
