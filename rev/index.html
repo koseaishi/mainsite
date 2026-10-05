@@ -37,6 +37,14 @@ textarea{resize:vertical;min-height:60px}
 @media(max-width:900px){.ws{grid-template-columns:1fr}}
 .ws>.card{display:flex;min-height:62vh;max-height:78vh}
 #panel{display:flex;flex:1;flex-direction:column;min-height:0;width:100%}
+body.cinema{overflow:hidden}
+body.cinema .wrap{max-width:none;padding:8px}
+body.cinema .quick-add,body.cinema #main>.row:first-child{display:none}
+body.cinema .ws{grid-template-columns:minmax(0,1fr) 320px;gap:8px;height:calc(100vh - 16px)}
+body.cinema .ws>div:first-child{display:flex;flex-direction:column;min-width:0;min-height:0}
+body.cinema .player{flex:1;min-height:0;aspect-ratio:auto;width:100%}
+body.cinema .ws>.card{min-height:0;max-height:none;height:100%}
+@media(max-width:900px){body.cinema{overflow:auto}body.cinema .ws{grid-template-columns:1fr;height:auto}body.cinema .player{flex:none;aspect-ratio:16/9}}
 .drawer{position:fixed;z-index:20;inset:0 0 0 auto;width:min(410px,100vw);padding:18px;background:var(--bg);border-left:1px solid var(--border);overflow:auto;transform:translateX(102%);transition:transform .2s ease}
 .drawer.open{transform:translateX(0)}
 .scrim{position:fixed;z-index:19;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s}
@@ -169,14 +177,16 @@ let twitchPlayer=null,twitchReady=false,twitchTimer=null,twitchApiPromise=null,n
 function ws(){const v=vod();if(!v){$("#main").innerHTML=`<section class="empty"><h2>Start a VOD review</h2><p class="muted">Paste or drop a YouTube or Twitch VOD link into the bar above.</p></section>`;positionInkTools();return}if(!/^[a-z][a-z\d+.-]*:\/\//i.test(v.url))v.url="https://"+v.url;
  $("#main").innerHTML=`<div class="row" style="margin-bottom:10px"><h2 style="margin:0" class="grow">${esc(v.title)}</h2></div>
  <div class="ws"><div><div class="player" id="pl"></div>
- <div class="row" style="margin-top:8px"><button id="pp" title="Play / Pause (Space)" style="width:40px"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3 1.5v11l9-5.5z"/></svg></button><button id="bk" title="Seek back 5 seconds (←)">−5s</button><button id="fw" title="Seek forward 5 seconds (→)">+5s</button>${(v.platform==="YouTube"?[.5,.75,1,1.5,2]:v.platform==="Local"?[.5,1,1.5,2,3]:[]).map((s,i)=>`<button data-sp="${s}" title="Playback speed ${s}× (key ${i+1})">${s}×</button>`).join("")}${v.platform==="Twitch"?'<span class="muted">Twitch playback speed is not available</span>':v.platform==="Local"?'':'<a class="muted" target="_blank" rel="noopener" href="'+esc(v.url)+'">Open on YouTube ↗</a>'}<span class="muted">Time</span><input id="ct" title="Current time. Type a time like 12:43 and press Enter to jump." style="width:80px" value="0:00"></div>
+ <div class="row" style="margin-top:8px"><button id="pp" title="Play / Pause (Space)" style="width:40px"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M3 1.5v11l9-5.5z"/></svg></button><button id="bk" title="Seek back 5 seconds (←)">−5s</button><button id="fw" title="Seek forward 5 seconds (→)">+5s</button>${(v.platform==="YouTube"?[.5,.75,1,1.5,2]:v.platform==="Local"?[.5,1,1.5,2,3]:[]).map((s,i)=>`<button data-sp="${s}" title="Playback speed ${s}× (key ${i+1})">${s}×</button>`).join("")}${v.platform==="Twitch"?'<span class="muted">Twitch playback speed is not available</span>':v.platform==="Local"?'':'<a class="muted" target="_blank" rel="noopener" href="'+esc(v.url)+'">Open on YouTube ↗</a>'}<span class="muted">Time</span><input id="ct" title="Current time. Type a time like 12:43 and press Enter to jump." style="width:80px"  value="0:00"><button id="cin" title="Cinema mode (T)" aria-label="Cinema mode" style="margin-left:auto;display:flex;align-items:center;padding:6px 8px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6"/></svg></button></div>
  <div class="tl" id="tl" title="Review timeline. Click to seek, or click a marker to jump to that note."></div>
  <div class="muted"><kbd>Space</kbd> play · <kbd>N</kbd> note · <kbd>G</kbd> goals · <kbd>B</kbd> library · <kbd>←</kbd><kbd>→</kbd> seek${v.platform==="YouTube"?" · <kbd>1–5</kbd> speed":""}</div></div>
  <div class="card"><div id="panel"></div></div></div>`;
+ $("#cin").onclick=()=>cinema();$("#cin").classList.toggle("on",document.body.classList.contains("cinema"));
  $("#pp").onclick=toggle;$("#bk").onclick=()=>seek(cur-5);$("#fw").onclick=()=>seek(cur+5);
  document.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>speed(+b.dataset.sp));
  $("#ct").onchange=e=>{const t=parseT(e.target.value);if(Number.isFinite(t))seek(t);else{notify("Enter a time as mm:ss or hh:mm:ss.");showT(true)}};rate=1;playing=false;updCtl();
  loadPlayer(0);panel();tl();positionInkTools()}
+function cinema(on=!document.body.classList.contains("cinema")){document.body.classList.toggle("cinema",on);$("#cin")?.classList.toggle("on",on);scrollTo(0,0);positionInkTools()}
 const host=()=>location.hostname||"localhost";
 function loadPlayer(t){const v=vod(),p=$("#pl");clearInterval(twitchTimer);twitchPlayer=null;twitchReady=false;if(localObjectUrl){URL.revokeObjectURL(localObjectUrl);localObjectUrl=null}
  if(v.platform==="Local"){p.innerHTML='<video id="local-video" controls playsinline></video>';reopenLocalVod(v);return}
@@ -219,7 +229,7 @@ function panel(){const v=vod(),p=$("#panel");if(!v||!p)return;p.innerHTML=panelT
  $("#na").onclick=addNote;$("#nt").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();addNote()}}}
 function setTab(t){panelTab=t;panel();if(t==="goals")$("#goals")?.focus()}
 addEventListener("keydown",e=>{const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable,k=e.key.toLowerCase(),modifier=e.ctrlKey||e.metaKey;if(modifier&&!typing&&!e.altKey&&k==="e"){e.preventDefault();clearInk();return}if(modifier&&!typing&&!e.altKey&&(k==="z"||k==="y")){e.preventDefault();if(k==="y"||e.shiftKey)redoInk();else undoInk();return}if(typing||modifier||e.altKey)return;
- if(k==="w"){e.preventDefault();setInkMode("pen");return}if(k==="e"){e.preventDefault();setInkMode("erase");return}if(k==="b"){e.preventDefault();setLibrary(!libraryOpen);return}if(!vod())return;
+ if(k==="w"){e.preventDefault();setInkMode("pen");return}if(k==="e"){e.preventDefault();setInkMode("erase");return}if(k==="b"){e.preventDefault();setLibrary(!libraryOpen);return}if(!vod())return;if(k==="t"){e.preventDefault();cinema();return}if(k==="escape"&&document.body.classList.contains("cinema")){cinema(false);return}
  if(k===" "){e.preventDefault();toggle()}else if(k==="n"){e.preventDefault();if(panelTab!=="notes")setTab("notes");$("#nt").focus()}else if(k==="g"){e.preventDefault();setTab("goals")}
  else if(k==="arrowleft")seek(cur-5);else if(k==="arrowright")seek(cur+5);else if(vod().platform==="YouTube"&&"12345".includes(k))speed([.5,.75,1,1.5,2][+k-1])});
 nav();bindLocalPicker();initInkTools();go();
