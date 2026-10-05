@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saberkratia's Scores Dashboard</title>
+<style>
+:root{--bg:#171B24;--card:#202633;--white:#E4D9D5;--muted:rgba(228,217,213,.58);--border:rgba(228,217,213,.13);--cream:#FDE3BA;--yellow:#F4D17D;--blue:#1F5E8D;--indigo:#414A84;--dark:#393F4E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font:14px/1.45 Inter,"Segoe UI",Arial,sans-serif}
+header{display:flex;align-items:center;gap:16px;padding:28px 24px 0;max-width:1000px;margin:0 auto}
+.icon-widget{display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--indigo);border-radius:8px;color:var(--white);transition:.15s}
+.icon-widget:hover{background:var(--blue);transform:translateY(-2px)}
+h1{margin:0;font-size:22px;color:var(--cream)}
+h2{margin:0 0 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow)}
+main{max-width:1000px;margin:0 auto;padding:24px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px;min-width:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.stat{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.stat b{display:block;font-size:22px;color:var(--cream)}
+.stat span{font-size:12px;color:var(--muted)}
+.hm-wrap{overflow-x:auto;padding-bottom:6px}
+.hm{display:inline-grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);grid-auto-columns:12px;gap:3px}
+.cell{width:12px;height:12px;border-radius:2px;background:var(--bg);border:1px solid var(--border)}
+.cell.l1{background:#2a4a66}.cell.l2{background:#1F5E8D}.cell.l3{background:#6a79c9}.cell.l4{background:var(--yellow);border-color:var(--yellow)}
+.months{display:grid;grid-auto-flow:column;grid-auto-columns:12px;gap:3px;font-size:10px;color:var(--muted);height:14px;margin-bottom:2px;white-space:nowrap}
+.legend{display:flex;gap:4px;align-items:center;font-size:12px;color:var(--muted);margin-top:8px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px}
+.tools .panel{margin-bottom:0;overflow:hidden}
+.tools .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600}
+.empty{color:var(--muted)}
+</style></head>
+<body>
+<header>
+<a class="icon-widget" href="../" aria-label="Visit saberkratia.com"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.6 2.6 4 5.7 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.7-4-9s1.4-6.4 4-9z"/></svg></a>
+<h1>Scores Dashboard</h1>
+</header>
+<main>
+<section class="panel"><h2>Overall</h2><div class="stats" id="gStats"></div></section>
+<section class="panel"><h2>Activity - all tools</h2><div id="gHeat"></div></section>
+<div class="tools">
+<section class="panel"><h2>CPS Trainer</h2><div class="stats" id="cStats"></div><h2 style="margin-top:16px">Best scores</h2><div id="cBest"></div><h2 style="margin-top:16px">Attempts per day</h2><div id="cHeat"></div></section>
+<section class="panel"><h2>VOD Review</h2><div class="stats" id="rStats"></div><h2 style="margin-top:16px">Comment count</h2><div id="rComments"></div><h2 style="margin-top:16px">Review time per day</h2><div id="rHeat"></div></section>
+</div>
+</main>
+<script>
+const REVIEW_MIN_SECONDS=300;
+const pad=n=>String(n).padStart(2,"0");
+const dayKey=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const parseKey=k=>{const[y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)};
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const $=id=>document.getElementById(id);
+const fmtDur=s=>s>=3600?(s/3600).toFixed(1)+" h":Math.round(s/60)+" min";
+
+function readJson(key){try{return JSON.parse(localStorage.getItem(key))}catch(e){return null}}
+
+// Older CPS attempts only stored a locale-formatted date string
+function parseLegacyDate(s){
+  const t=Date.parse(s);if(!isNaN(t))return t;
+  const m=/(\d{1,2})[./-](\d{1,2})[./-](\d{4}),?\s*(\d{1,2})?:?(\d{2})?/.exec(String(s));
+  return m?new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0)).getTime():NaN;
+}
+
+const cpsAttempts=[];
+const cpsRaw=readJson("cps_scores")||{};
+for(const[key,list]of Object.entries(cpsRaw)){
+  if(!Array.isArray(list))continue;
+  const[dur,mode]=key.includes("_")?key.split("_"):[key,"right"];
+  for(const a of list){
+    if(!a)continue;
+    const t=Number.isFinite(a.ts)?a.ts:parseLegacyDate(a.date);
+    if(isNaN(t)||!Number.isFinite(a.cps))continue;
+    cpsAttempts.push({t,dur,mode,cps:a.cps});
+  }
+}
+const cpsDays={};
+for(const a of cpsAttempts){const k=dayKey(new Date(a.t));cpsDays[k]=(cpsDays[k]||0)+1}
+
+const revRaw=((readJson("vodreview")||{}).review)||{};
+const revDays={};
+if(revRaw.days&&typeof revRaw.days==="object")for(const[k,s]of Object.entries(revRaw.days))if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&Number.isFinite(s)&&s>0)revDays[k]=s;
+const revActive=new Set(Object.keys(revDays).filter(k=>revDays[k]>=REVIEW_MIN_SECONDS));
+const cpsActive=new Set(Object.keys(cpsDays));
+const allActive=new Set([...cpsActive,...revActive]);
+
+function streaks(set){
+  const keys=[...set].sort();let longest=0,run=0,prev=null;
+  for(const k of keys){run=prev&&dayKey(addDays(parseKey(k),-1))===prev?run+1:1;longest=Math.max(longest,run);prev=k}
+  const today=new Date();let c=set.has(dayKey(today))?today:addDays(today,-1),cur=0;
+  while(set.has(dayKey(c))){cur++;c=addDays(c,-1)}
+  return{current:cur,longest};
+}
+
+const stat=(v,l)=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`;
+
+function heatmap(el,values,unit){
+  const today=new Date();today.setHours(0,0,0,0);
+  const total=52*7+today.getDay();
+  const start=addDays(today,-total);
+  const nums=Object.values(values).filter(v=>v>0).sort((a,b)=>a-b);
+  const q=p=>nums.length?nums[Math.min(nums.length-1,Math.floor(p*nums.length))]:1;
+  const t1=q(.25),t2=q(.5),t3=q(.75);
+  const level=v=>!v?0:v<=t1?1:v<=t2?2:v<=t3?3:4;
+  let cells="",months="",lastMonth=-1;
+  for(let i=0;i<=total;i++){
+    const d=addDays(start,i),k=dayKey(d),v=values[k]||0;
+    if(d.getDay()===0){
+      const m=d.getMonth();
+      months+=`<span>${m!==lastMonth?d.toLocaleString(undefined,{month:"short"}):""}</span>`;lastMonth=m;
+    }
+    cells+=`<div class="cell l${level(v)}" title="${k}: ${v?unit(v):"no activity"}"></div>`;
+  }
+  el.innerHTML=`<div class="hm-wrap"><div class="months">${months}</div><div class="hm">${cells}</div></div>
+  <div class="legend">Less <div class="cell"></div><div class="cell l1"></div><div class="cell l2"></div><div class="cell l3"></div><div class="cell l4"></div> More</div>`;
+  el.firstElementChild.scrollLeft=1e6;
+}
+
+// Global heat per day: CPS attempts plus one for each day with a qualifying review
+const globalDays={};
+for(const k of cpsActive)globalDays[k]=cpsDays[k];
+for(const k of revActive)globalDays[k]=(globalDays[k]||0)+1;
+
+const gs=streaks(allActive),cs=streaks(cpsActive),rs=streaks(revActive);
+const totalReview=Object.values(revDays).reduce((a,b)=>a+b,0);
+$("gStats").innerHTML=stat(gs.current,"Current streak (days)")+stat(gs.longest,"Longest streak (days)")+stat(allActive.size,"Days practiced")+stat(cpsAttempts.length,"CPS attempts")+stat(fmtDur(totalReview),"Time reviewing");
+heatmap($("gHeat"),globalDays,v=>`${v} activit${v===1?"y":"ies"}`);
+
+const bestCps=cpsAttempts.reduce((m,a)=>Math.max(m,a.cps),0);
+const mostDay=Object.values(cpsDays).reduce((m,v)=>Math.max(m,v),0);
+$("cStats").innerHTML=stat(cs.current,"Current streak")+stat(cs.longest,"Longest streak")+stat(cpsActive.size,"Days practiced")+stat(cpsAttempts.length,"Attempts")+stat(bestCps?bestCps.toFixed(2):"-","Best CPS")+stat(mostDay,"Most in a day");
+heatmap($("cHeat"),cpsDays,v=>`${v} attempt${v===1?"":"s"}`);
+
+const best={};
+for(const a of cpsAttempts){const k=a.dur+"s "+a.mode;const b=best[k]||(best[k]={n:0,best:0,sum:0});b.n++;b.sum+=a.cps;b.best=Math.max(b.best,a.cps)}
+const rows=Object.entries(best).sort((a,b)=>parseInt(a[0])-parseInt(b[0])||a[0].localeCompare(b[0]));
+$("cBest").innerHTML=rows.length?`<table><tr><th>Mode</th><th>Attempts</th><th>Best</th><th>Average</th></tr>${rows.map(([k,b])=>`<tr><td>${k}</td><td>${b.n}</td><td>${b.best.toFixed(2)}</td><td>${(b.sum/b.n).toFixed(2)}</td></tr>`).join("")}</table>`:`<div class="empty">No CPS attempts yet.</div>`;
+
+const revKeys=Object.keys(revDays);
+const bestRev=revKeys.reduce((m,k)=>Math.max(m,revDays[k]),0);
+$("rStats").innerHTML=stat(rs.current,"Current streak")+stat(rs.longest,"Longest streak")+stat(revActive.size,`Days reviewed`)+stat(fmtDur(totalReview),"Total time")+stat(fmtDur(bestRev),"Longest day")+stat(revKeys.length?fmtDur(totalReview/revKeys.length):"-","Avg per active day");
+const vods=Array.isArray((readJson("vodreview")||{}).vods)?readJson("vodreview").vods:[];
+const byPlat={};let totalComments=0;
+for(const v of vods){const n=Array.isArray(v&&v.comments)?v.comments.length:0;const b=byPlat[v.platform||"Other"]||(byPlat[v.platform||"Other"]={vods:0,comments:0});b.vods++;b.comments+=n;totalComments+=n}
+$("rComments").innerHTML=vods.length?`<table><tr><th>Source</th><th>VODs</th><th>Comment count</th></tr>${Object.entries(byPlat).map(([k,b])=>`<tr><td>${k}</td><td>${b.vods}</td><td>${b.comments}</td></tr>`).join("")}<tr><td><b>Total</b></td><td><b>${vods.length}</b></td><td><b>${totalComments}</b></td></tr></table>`:`<div class="empty">No comments made yet.</div>`;
+heatmap($("rHeat"),revDays,fmtDur);
+</script>
+</body></html>

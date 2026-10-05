@@ -112,6 +112,7 @@ function finishTest() {
 
   scores[scoreKey(selectedDuration, clickMode)].push({
     date: new Date().toLocaleString(),
+    ts: Date.now(),
     clicks: clicks,
     cps: Math.round(cps * 100) / 100
   });
