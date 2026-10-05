@@ -83,6 +83,7 @@ body.cinema .ws>.card{min-height:0;max-height:none;height:100%}
 .player video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
 .local-missing{display:flex;width:100%;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center}
 .tl{position:relative;height:34px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin:10px 0}
+.tl-tip{position:fixed;z-index:60;display:none;transform:translate(-50%,calc(-100% - 6px));padding:2px 7px;background:var(--dark);color:var(--cream);border:1px solid var(--border);border-radius:4px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;pointer-events:none}
 .mk{position:absolute;top:4px;width:8px;height:24px;border-radius:3px;cursor:pointer;transform:translateX(-4px);opacity:.9}
 .mk:hover{transform:translateX(-4px) scaleY(1.15)}
 .head{position:absolute;top:0;bottom:0;width:2px;background:var(--cream)}
@@ -213,7 +214,10 @@ function tl(){const el=$("#tl");if(!el)return;const v=vod(),D=span();
  const ev=v.comments.map(c=>({ts:c.ts,c:"#4a86b8",t:`${fmt(c.ts)}: ${c.text}`}));
  el.innerHTML=ev.map(e=>`<div class="mk" data-t="${e.ts}" style="left:${e.ts/D*100}%;background:${e.c}" title="${esc(e.t)}"></div>`).join("")+'<div class="head" id="hd"></div>';
  el.querySelectorAll(".mk").forEach(m=>m.onclick=()=>seek(+m.dataset.t));
- el.onclick=e=>{if(e.target===el||e.target.id==="hd")seek((e.offsetX/el.clientWidth)*D)};moveHead()}
+ el.onclick=e=>{if(e.target===el||e.target.id==="hd")seek((e.offsetX/el.clientWidth)*D)};
+ let tip=$("#tlTip");if(!tip){tip=document.createElement("div");tip.id="tlTip";tip.className="tl-tip";document.body.appendChild(tip)}
+ el.onmousemove=e=>{const r=el.getBoundingClientRect(),x=Math.min(Math.max(e.clientX-r.left,0),r.width);tip.textContent=fmt(x/r.width*span());tip.style.left=e.clientX+"px";tip.style.top=r.top+"px";tip.style.display="block"};
+ el.onmouseleave=()=>{tip.style.display="none"};moveHead()}
 function moveHead(){const h=$("#hd");if(h)h.style.left=Math.min(100,cur/span()*100)+"%"}
 const tabs=()=>`<div class="panel-tabs"><button data-tab="notes" class="${panelTab==="notes"?"on":""}" title="Session notes (N)">Session Notes</button><button data-tab="goals" class="${panelTab==="goals"?"on":""}" title="Review goals (G)">Goals <kbd>G</kbd></button></div>`;
 const P={goals(v){return`${tabs()}<textarea id="goals" placeholder="Goals for this review…">${esc(v.reviewGoals||"")}</textarea>`},notes(v){const L=[...v.comments].sort((a,b)=>a.ts-b.ts);return`${tabs()}<div class="note-list">${L.map(c=>`<div class="item note-entry" data-note-row="${c.id}"><div class="note-view"><span class="ts" data-s="${c.ts}">${fmt(c.ts)}</span><span class="note-text">${esc(c.text)}</span><div class="note-actions"><button class="x" data-e="${c.id}">Edit</button><button class="x" data-d="${c.id}" title="Delete note">✕</button></div></div></div>`).join("")||'<div class="muted">No notes yet.</div>'}</div><div class="note-compose"><div class="row"><span class="ts" id="nts">${fmt(cur)}</span><span class="muted">current timestamp</span></div><textarea id="nt" placeholder="Add a note at this timestamp"></textarea><div class="note-toolbar"><button id="na" title="Add note (Enter)">Add note</button><div class="export-split"><button id="exportNotes" title="Export every note in this session">Export notes</button><select id="noteFormat" aria-label="Export format"><option value="txt" ${noteFormat==="txt"?"selected":""}>TXT</option><option value="md" ${noteFormat==="md"?"selected":""}>Markdown</option><option value="json" ${noteFormat==="json"?"selected":""}>JSON</option><option value="csv" ${noteFormat==="csv"?"selected":""}>CSV</option></select></div></div></div>`}};
