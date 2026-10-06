@@ -63,7 +63,7 @@ a {
 .page {
     position: relative;
     z-index: 1;
-    width: min(900px, calc(100% - 36px));
+    width: min(940px, calc(100% - 36px));
     min-height: 100vh;
 
     display: flex;
@@ -169,21 +169,22 @@ section {
 
 .socials {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     flex-wrap: wrap;
 
     gap: 8px;
 }
 
 .socials a {
-    width: 140px;
+    flex: 1 1 110px;
+    min-width: 0;
     min-height: 40px;
 
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 
-    padding: 5px 8px;
+    padding: 5px 7px;
 
     background: var(--card);
 
@@ -411,11 +412,8 @@ footer {
         text-align: left;
     }
 
-    .socials {
-        grid-template-columns: 1fr;
-    }
-
     .socials a {
+        flex-basis: calc(50% - 4px);
         min-height: 42px;
     }
 
