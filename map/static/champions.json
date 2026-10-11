@@ -1,0 +1,1370 @@
+[
+  {
+    "name": "Aatrox",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Ahri",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Akali",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Akshan",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Alistar",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Ambessa",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Amumu",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Anivia",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Annie",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Aphelios",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Ashe",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Aurelion Sol",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Aurora",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Azir",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Bard",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Bel'Veth",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Blitzcrank",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Brand",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": true
+  },
+  {
+    "name": "Braum",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Briar",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Caitlyn",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Camille",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Cassiopeia",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Cho'Gath",
+    "top": true,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Corki",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Darius",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Diana",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Dr. Mundo",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Draven",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Ekko",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Elise",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Evelynn",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Ezreal",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Fiddlesticks",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Fiora",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Fizz",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Galio",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Gangplank",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Garen",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Gnar",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Gragas",
+    "top": true,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Graves",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Gwen",
+    "top": true,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Hecarim",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Heimerdinger",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Hwei",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Illaoi",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Irelia",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Ivern",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Janna",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Jarvan IV",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Jax",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Jayce",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Jhin",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Jinx",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "K'Sante",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kai'Sa",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Kalista",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Karma",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Karthus",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kassadin",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Katarina",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kayle",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kayn",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kennen",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kha'Zix",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kindred",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kled",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Kog'Maw",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "LeBlanc",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Lee Sin",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Leona",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Lillia",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Lissandra",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Locke",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Lucian",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Lulu",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Lux",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Malphite",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Malzahar",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Maokai",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Master Yi",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Mel",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Milio",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Miss Fortune",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Mordekaiser",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Morgana",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Naafiri",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Nami",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Nasus",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Nautilus",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Neeko",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Nidalee",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Nilah",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Nocturne",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Nunu",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Olaf",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Orianna",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Ornn",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Pantheon",
+    "top": true,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Poppy",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Pyke",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Qiyana",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Quinn",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Rakan",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Rammus",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Rek'Sai",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Rell",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Renata Glasc",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Renekton",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Rengar",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Riven",
+    "top": true,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Rumble",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Ryze",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Samira",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Sejuani",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Senna",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": true
+  },
+  {
+    "name": "Seraphine",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": true
+  },
+  {
+    "name": "Sett",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Shaco",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Shen",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Shyvana",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Singed",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Sion",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Sivir",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Skarner",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Smolder",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Sona",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Soraka",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Swain",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": true
+  },
+  {
+    "name": "Sylas",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Syndra",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Tahm Kench",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Taliyah",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Talon",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Taric",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Teemo",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Thresh",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Tristana",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Trundle",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Tryndamere",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Twisted Fate",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Twitch",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Udyr",
+    "top": true,
+    "jungle": true,
+    "mid": true,
+    "bot": true,
+    "support": true
+  },
+  {
+    "name": "Urgot",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Varus",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Vayne",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Veigar",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Vel'Koz",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Vex",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Vi",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Viego",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Viktor",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Vladimir",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Volibear",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Warwick",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Wukong",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Xayah",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Xerath",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Xin Zhao",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Yasuo",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Yone",
+    "top": true,
+    "jungle": false,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Yorick",
+    "top": true,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Zyra",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Yunara",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Yuumi",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": false,
+    "support": true
+  },
+  {
+    "name": "Zaahen",
+    "top": true,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Zac",
+    "top": false,
+    "jungle": true,
+    "mid": false,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Zed",
+    "top": false,
+    "jungle": true,
+    "mid": true,
+    "bot": false,
+    "support": false
+  },
+  {
+    "name": "Zeri",
+    "top": false,
+    "jungle": false,
+    "mid": false,
+    "bot": true,
+    "support": false
+  },
+  {
+    "name": "Ziggs",
+    "top": false,
+    "jungle": false,
+    "mid": true,
+    "bot": true,
+    "support": false
+  }
+]

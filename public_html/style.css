@@ -157,6 +157,16 @@ section {
     font-size: 0.72rem;
 }
 
+.section-link {
+    color: var(--muted);
+    font-size: 0.72rem;
+    transition: color 150ms ease;
+}
+
+.section-link:hover {
+    color: var(--yellow);
+}
+
 .count {
     color: var(--yellow);
 
@@ -295,6 +305,26 @@ a:hover .arrow {
     transform: translateX(3px);
 }
 */
+
+/* ---------- YOUTUBE ---------- */
+
+.youtube-card {
+    overflow: hidden;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.youtube-card iframe {
+    display: block;
+
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    border: 0;
+}
 
 /* ---------- TOOLS ---------- */
 
