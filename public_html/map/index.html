@@ -9,7 +9,8 @@
 <body>
   <main class="app" data-dev-tools-enabled="false">
     <header class="toolbar">
-      <a class="home-link" href="/" aria-label="Back to Saberkratia home">Home</a>
+      <a class="icon-widget" href="/" aria-label="Home"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h5v-6h4v6h5V10"></path></svg></a>
+<a class="icon-widget twitch-link" href="https://www.twitch.tv/saberkratia" target="_blank" rel="noopener noreferrer" aria-label="Twitch"><img src="/map/static/twitch.png" alt="Watch me on Twitch"><span class="live-badge" aria-hidden="true">LIVE</span></a>
       <div id="matchImport" class="match-import">
         <input id="matchLink" type="url" placeholder="Paste OP.GG match link" spellcheck="false" title="Paste OP.GG match link">
         <button id="importMatchBtn" class="clear-btn" type="button" title="Import match">Import match</button>
@@ -177,5 +178,6 @@
   </div>
 
   <script src="/map/static/app.js"></script>
+  <script src="/twitch-status.js" defer></script>
 </body>
 </html>

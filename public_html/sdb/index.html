@@ -7,7 +7,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--white);font:14px/1.45 Inter,"Segoe UI",Arial,sans-serif}
 header{display:flex;align-items:center;gap:16px;padding:28px 24px 0;max-width:1000px;margin:0 auto}
-.icon-widget{display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--indigo);border-radius:8px;color:var(--white);transition:.15s}
+.icon-widget{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--indigo);border-radius:8px;color:var(--white);transition:.15s}
 .icon-widget:hover{background:var(--blue);transform:translateY(-2px)}
 h1{margin:0;font-size:22px;color:var(--cream)}
 h2{margin:0 0 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow)}
@@ -30,10 +30,20 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)}
 th{color:var(--muted);font-weight:600}
 .empty{color:var(--muted)}
+.icon-widget img{display:block;width:28px;height:28px;object-fit:contain}
+.twitch-link{position:relative;isolation:isolate;overflow:hidden}
+.twitch-link>*{position:relative;z-index:1}
+.live-badge{display:none;position:absolute;right:3px;bottom:3px;padding:1px 3px;background:#d94242;color:#fff;border-radius:3px;font-size:.45rem;font-weight:900;letter-spacing:.04em}
+.twitch-link.is-live{box-shadow:0 0 0 1px #d94242,0 0 14px rgba(217,66,66,.3)}
+.twitch-link.is-live .live-badge{display:inline-block}
+.twitch-link.is-live::after{position:absolute;z-index:0;top:-50%;bottom:-50%;left:-45%;width:28%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);content:"";pointer-events:none;transform:skewX(-20deg);animation:twitch-shine 2.8s ease-in-out infinite}
+@keyframes twitch-shine{0%,35%{left:-45%}75%,100%{left:125%}}
+@media(prefers-reduced-motion:reduce){.twitch-link.is-live::after{animation:none}}
 </style></head>
 <body>
 <header>
-<a class="icon-widget" href="../" aria-label="Visit saberkratia.com"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c2.6 2.6 4 5.7 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.7-4-9s1.4-6.4 4-9z"/></svg></a>
+<a class="icon-widget" href="../" aria-label="Home"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h5v-6h4v6h5V10"></path></svg></a>
+<a class="icon-widget twitch-link" href="https://www.twitch.tv/saberkratia" target="_blank" rel="noopener noreferrer" aria-label="Twitch"><img src="twitch.png" alt="Watch me on Twitch"><span class="live-badge" aria-hidden="true">LIVE</span></a>
 <h1>Scores Dashboard</h1>
 </header>
 <main>
@@ -145,4 +155,5 @@ for(const v of vods){const n=Array.isArray(v&&v.comments)?v.comments.length:0;co
 $("rComments").innerHTML=vods.length?`<table><tr><th>Source</th><th>VODs</th><th>Comment count</th></tr>${Object.entries(byPlat).map(([k,b])=>`<tr><td>${k}</td><td>${b.vods}</td><td>${b.comments}</td></tr>`).join("")}<tr><td><b>Total</b></td><td><b>${vods.length}</b></td><td><b>${totalComments}</b></td></tr></table>`:`<div class="empty">No comments made yet.</div>`;
 heatmap($("rHeat"),revDays,fmtDur);
 </script>
+<script src="../twitch-status.js" defer></script>
 </body></html>

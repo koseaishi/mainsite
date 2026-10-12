@@ -1,0 +1,48 @@
+:root{--bg:#171B24;--card:#202633;--white:#E4D9D5;--muted:rgba(228,217,213,.58);--border:rgba(228,217,213,.13);--cream:#FDE3BA;--yellow:#F4D17D;--blue:#1F5E8D;--indigo:#414A84}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,"Segoe UI",system-ui,sans-serif;font-size:14px}
+.page{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+h1{margin:0;color:var(--cream);font-size:22px}
+h2{margin:0 0 10px;color:var(--yellow);font-size:15px}
+.back{color:var(--muted);text-decoration:none}
+.back:hover{color:var(--cream)}
+button{background:var(--card);color:var(--white);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font:inherit;cursor:pointer;transition:.15s}
+button:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-1px)}
+button[data-mode="right"]{--m:#4caf6a}
+button[data-mode="q"]{--m:#d9534f}
+button[data-mode="adaptive"]{--m:#9b6bd6}
+button[data-mode]{border-color:var(--m)}
+button[data-mode]:hover,button[data-mode].active{background:var(--m);border-color:var(--m);color:#fff}
+.slider{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.modes,.row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}
+.stats div{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px 10px}
+.stats span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.stats b{color:var(--cream);font-size:18px}
+canvas{display:block;width:100%;height:auto;background:var(--card);border:1px solid var(--border);border-radius:8px;touch-action:none}
+.hint{color:var(--muted);margin:10px 0 18px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px}
+.panel canvas{background:transparent;border:0;margin-bottom:10px}
+@media(max-width:640px){.stats{grid-template-columns:repeat(3,1fr)}}
+#game{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='white' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='2' fill='white'/%3E%3C/svg%3E") 12 12,crosshair}
+#game.champ{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%23ff3030' stroke-width='2'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%23ff3030'/%3E%3C/svg%3E") 12 12,crosshair}
+.settings{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:12px}
+.settings[hidden]{display:none}
+.dropwrap{position:relative;height:0}
+.settings{position:absolute;top:0;left:0;right:0;z-index:10;margin:0;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.icon-widget{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:52px;height:52px;background:var(--indigo);border-radius:8px;color:var(--white);transition:background .15s,transform .15s}
+.icon-widget:hover{background:var(--blue);transform:translateY(-2px)}
+.icon-widget img{display:block;width:28px;height:28px;object-fit:contain}
+.twitch-link{position:relative;isolation:isolate;overflow:hidden}
+.twitch-link>*{position:relative;z-index:1}
+.live-badge{display:none;position:absolute;right:3px;bottom:3px;padding:1px 3px;background:#d94242;color:#fff;border-radius:3px;font-size:.45rem;font-weight:900;letter-spacing:.04em}
+.twitch-link.is-live{box-shadow:0 0 0 1px #d94242,0 0 14px rgba(217,66,66,.3)}
+.twitch-link.is-live .live-badge{display:inline-block}
+.twitch-link.is-live::after{position:absolute;z-index:0;top:-50%;bottom:-50%;left:-45%;width:28%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);content:"";pointer-events:none;transform:skewX(-20deg);animation:twitch-shine 2.8s ease-in-out infinite}
+@keyframes twitch-shine{0%,35%{left:-45%}75%,100%{left:125%}}
+@media(prefers-reduced-motion:reduce){.twitch-link.is-live::after{animation:none}}
+#settingsBtn{display:inline-flex;align-items:center;justify-content:center;padding:8px 10px}
+button.rebinding{border-color:var(--yellow);color:var(--yellow);background:rgba(244,209,125,.14)}
+.slider span{font-variant-numeric:tabular-nums;color:var(--cream)}
+

@@ -943,3 +943,16 @@ html, body {
   .settings-panel { padding: 12px; }
   .match-import { display: none; }
 }
+
+.icon-widget{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:32px;height:32px;background:#414A84;border-radius:6px;color:#E4D9D5;transition:.15s}
+.icon-widget:hover{background:#1F5E8D;transform:translateY(-1px)}
+.icon-widget svg{width:18px;height:18px}
+.icon-widget img{display:block;width:18px;height:18px;object-fit:contain}
+.twitch-link{position:relative;isolation:isolate;overflow:hidden}
+.twitch-link>*{position:relative;z-index:1}
+.live-badge{display:none;position:absolute;right:3px;bottom:3px;padding:1px 3px;background:#d94242;color:#fff;border-radius:3px;font-size:.45rem;font-weight:900;letter-spacing:.04em}
+.twitch-link.is-live{box-shadow:0 0 0 1px #d94242,0 0 14px rgba(217,66,66,.3)}
+.twitch-link.is-live .live-badge{display:inline-block}
+.twitch-link.is-live::after{position:absolute;z-index:0;top:-50%;bottom:-50%;left:-45%;width:28%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);content:"";pointer-events:none;transform:skewX(-20deg);animation:twitch-shine 2.8s ease-in-out infinite}
+@keyframes twitch-shine{0%,35%{left:-45%}75%,100%{left:125%}}
+@media(prefers-reduced-motion:reduce){.twitch-link.is-live::after{animation:none}}
