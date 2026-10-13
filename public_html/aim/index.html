@@ -71,12 +71,15 @@
   <p class="hint" id="hint"></p>
 
   <section class="panel">
-    <h2 id="graphTitle">History</h2>
+    <div class="row graph-filter">
+      <h2 id="graphTitle">History</h2>
+      <label class="slider"><input type="checkbox" id="splitChk"> Separate graph by settings</label>
+      <select id="splitSel" aria-label="Settings to show" hidden></select>
+    </div>
     <canvas id="graph" width="800" height="260"></canvas>
     <div class="row">
       <button id="exportBtn">Export JSON</button>
       <button id="importBtn">Import JSON</button>
-      <button id="clearBtn">Clear mode history</button>
       <input type="file" id="importFile" accept="application/json" hidden>
     </div>
   </section>

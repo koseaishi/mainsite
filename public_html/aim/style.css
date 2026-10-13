@@ -45,4 +45,6 @@ canvas{display:block;width:100%;height:auto;background:var(--card);border:1px so
 #settingsBtn{display:inline-flex;align-items:center;justify-content:center;padding:8px 10px}
 button.rebinding{border-color:var(--yellow);color:var(--yellow);background:rgba(244,209,125,.14)}
 .slider span{font-variant-numeric:tabular-nums;color:var(--cream)}
-
+select{background:var(--bg);color:var(--white);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font:inherit;cursor:pointer}
+.graph-filter{align-items:center;gap:8px 16px}
+.graph-filter h2{margin:0}

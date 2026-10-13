@@ -51,6 +51,7 @@ th{color:var(--muted);font-weight:600}
 <section class="panel"><h2>Activity - all tools</h2><div id="gHeat"></div></section>
 <div class="tools">
 <section class="panel"><h2>CPS Trainer</h2><div class="stats" id="cStats"></div><h2 style="margin-top:16px">Best scores</h2><div id="cBest"></div><h2 style="margin-top:16px">Attempts per day</h2><div id="cHeat"></div></section>
+<section class="panel"><h2>Aim Trainer</h2><div class="stats" id="aStats"></div><h2 style="margin-top:16px">Best scores</h2><div id="aBest"></div><h2 style="margin-top:16px">Sessions per day</h2><div id="aHeat"></div></section>
 <section class="panel"><h2>VOD Review</h2><div class="stats" id="rStats"></div><h2 style="margin-top:16px">Comment count</h2><div id="rComments"></div><h2 style="margin-top:16px">Review time per day</h2><div id="rHeat"></div></section>
 </div>
 </main>
@@ -84,6 +85,16 @@ for(const[key,list]of Object.entries(cpsRaw)){
     cpsAttempts.push({t,dur,mode,cps:a.cps});
   }
 }
+const AIM_MODES={right:"Right click",q:"Attack key + left click",adaptive:"Adaptive"};
+const aimSessions=[];
+const aimRaw=readJson("lolAimHistory");
+if(Array.isArray(aimRaw))for(const r of aimRaw){
+  if(!r||!AIM_MODES[r.mode]||!Number.isFinite(r.cps))continue;
+  const t=Date.parse(r.date);if(isNaN(t))continue;
+  aimSessions.push({t,mode:r.mode,cps:r.cps,acc:Number.isFinite(r.accuracy)?r.accuracy:null});
+}
+const aimDays={};
+for(const a of aimSessions){const k=dayKey(new Date(a.t));aimDays[k]=(aimDays[k]||0)+1}
 const cpsDays={};
 for(const a of cpsAttempts){const k=dayKey(new Date(a.t));cpsDays[k]=(cpsDays[k]||0)+1}
 
@@ -92,7 +103,8 @@ const revDays={};
 if(revRaw.days&&typeof revRaw.days==="object")for(const[k,s]of Object.entries(revRaw.days))if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&Number.isFinite(s)&&s>0)revDays[k]=s;
 const revActive=new Set(Object.keys(revDays).filter(k=>revDays[k]>=REVIEW_MIN_SECONDS));
 const cpsActive=new Set(Object.keys(cpsDays));
-const allActive=new Set([...cpsActive,...revActive]);
+const aimActive=new Set(Object.keys(aimDays));
+const allActive=new Set([...cpsActive,...aimActive,...revActive]);
 
 function streaks(set){
   const keys=[...set].sort();let longest=0,run=0,prev=null;
@@ -126,14 +138,15 @@ function heatmap(el,values,unit){
   el.firstElementChild.scrollLeft=1e6;
 }
 
-// Global heat per day: CPS attempts plus one for each day with a qualifying review
+// Global heat per day: CPS attempts and aim sessions plus one for each day with a qualifying review
 const globalDays={};
 for(const k of cpsActive)globalDays[k]=cpsDays[k];
+for(const k of aimActive)globalDays[k]=(globalDays[k]||0)+aimDays[k];
 for(const k of revActive)globalDays[k]=(globalDays[k]||0)+1;
 
-const gs=streaks(allActive),cs=streaks(cpsActive),rs=streaks(revActive);
+const gs=streaks(allActive),cs=streaks(cpsActive),ams=streaks(aimActive),rs=streaks(revActive);
 const totalReview=Object.values(revDays).reduce((a,b)=>a+b,0);
-$("gStats").innerHTML=stat(gs.current,"Current streak (days)")+stat(gs.longest,"Longest streak (days)")+stat(allActive.size,"Days practiced")+stat(cpsAttempts.length,"CPS attempts")+stat(fmtDur(totalReview),"Time reviewing");
+$("gStats").innerHTML=stat(gs.current,"Current streak (days)")+stat(gs.longest,"Longest streak (days)")+stat(allActive.size,"Days practiced")+stat(cpsAttempts.length,"CPS attempts")+stat(aimSessions.length,"Aim sessions")+stat(fmtDur(totalReview),"Time reviewing");
 heatmap($("gHeat"),globalDays,v=>`${v} activit${v===1?"y":"ies"}`);
 
 const bestCps=cpsAttempts.reduce((m,a)=>Math.max(m,a.cps),0);
@@ -145,6 +158,15 @@ const best={};
 for(const a of cpsAttempts){const k=a.dur+"s "+a.mode;const b=best[k]||(best[k]={n:0,best:0,sum:0});b.n++;b.sum+=a.cps;b.best=Math.max(b.best,a.cps)}
 const rows=Object.entries(best).sort((a,b)=>parseInt(a[0])-parseInt(b[0])||a[0].localeCompare(b[0]));
 $("cBest").innerHTML=rows.length?`<table><tr><th>Mode</th><th>Attempts</th><th>Best</th><th>Average</th></tr>${rows.map(([k,b])=>`<tr><td>${k}</td><td>${b.n}</td><td>${b.best.toFixed(2)}</td><td>${(b.sum/b.n).toFixed(2)}</td></tr>`).join("")}</table>`:`<div class="empty">No CPS attempts yet.</div>`;
+
+const bestAim=aimSessions.reduce((m,a)=>Math.max(m,a.cps),0);
+const accs=aimSessions.map(a=>a.acc).filter(v=>v!==null);
+$("aStats").innerHTML=stat(ams.current,"Current streak")+stat(ams.longest,"Longest streak")+stat(aimActive.size,"Days practiced")+stat(aimSessions.length,"Sessions")+stat(bestAim?bestAim.toFixed(2):"-","Best CPS")+stat(accs.length?(accs.reduce((a,b)=>a+b,0)/accs.length).toFixed(1)+"%":"-","Avg accuracy");
+heatmap($("aHeat"),aimDays,v=>`${v} session${v===1?"":"s"}`);
+const aimBest={};
+for(const a of aimSessions){const b=aimBest[a.mode]||(aimBest[a.mode]={n:0,best:0,sum:0,acc:0,accN:0});b.n++;b.sum+=a.cps;b.best=Math.max(b.best,a.cps);if(a.acc!==null){b.acc+=a.acc;b.accN++}}
+const aimRows=Object.keys(AIM_MODES).filter(m=>aimBest[m]);
+$("aBest").innerHTML=aimRows.length?`<table><tr><th>Mode</th><th>Sessions</th><th>Best CPS</th><th>Avg CPS</th><th>Avg acc.</th></tr>${aimRows.map(m=>{const b=aimBest[m];return`<tr><td>${AIM_MODES[m]}</td><td>${b.n}</td><td>${b.best.toFixed(2)}</td><td>${(b.sum/b.n).toFixed(2)}</td><td>${b.accN?(b.acc/b.accN).toFixed(1)+"%":"-"}</td></tr>`}).join("")}</table>`:`<div class="empty">No aim trainer sessions yet.</div>`;
 
 const revKeys=Object.keys(revDays);
 const bestRev=revKeys.reduce((m,k)=>Math.max(m,revDays[k]),0);

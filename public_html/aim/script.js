@@ -134,8 +134,11 @@
     if (need === 'move') actionOk = btn === 2 && !qArmed;
     else if (need === 'attack') actionOk = btn === 0 && qArmed;
     else actionOk = btn === 0 && qArmed && champOnly;
-    click(actionOk && onTarget);
-    register(actionOk && onTarget, forgiving || onTarget);
+    // Only a correct hit advances unless forgiving mode is on; clicking the
+    // target with the wrong action (e.g. no attack key) is still a miss.
+    const ok = actionOk && onTarget;
+    click(ok);
+    register(ok, forgiving || ok);
   }
 
   function click(ok) {
@@ -228,10 +231,12 @@
       avgHitTime: intervals === null ? null : +intervals.toFixed(3),
       distance: radius,
       radius,
-      size: targetSizeNum
+      size: targetSizeNum,
+      forgiving
     };
     recap = buildRecap(lastResult, history.filter(r => r.mode === mode));
     history.push(lastResult); save();
+    splitKey = comboKey(lastResult);
     updateStats(DURATION); drawGraph(true);
   }
 
@@ -407,11 +412,43 @@
   const cache = document.createElement('canvas');
   cache.width = gcv.width; cache.height = gcv.height;
 
+  // Optional split: show only runs with one distance / target size / forgiving combination.
+  let splitOn = localStorage.getItem('lolAimGraphSplit') === '1';
+  let splitKey = null;
+  const forgiveTag = r => r.forgiving === false ? 'strict' : r.forgiving === true ? 'forgiving' : 'unknown';
+  const comboKey = r => `${pxToDistSize(r.radius ?? r.distance ?? 100)}|${pxToSize(r.size ?? 26)}|${forgiveTag(r)}`;
+  const comboLabel = k => {
+    const [d, s, f] = k.split('|');
+    const fl = { strict: 'Strict', forgiving: 'Forgiving', unknown: 'Forgiving: unrecorded' }[f];
+    return `Distance ${d} · Target ${s} · ${fl}`;
+  };
+
+  function graphData() {
+    const all = history.filter(r => r.mode === mode);
+    return (splitOn ? all.filter(r => comboKey(r) === splitKey) : all).slice(-40);
+  }
+
+  function updateSplitSelect() {
+    const sel = $('splitSel');
+    sel.hidden = !splitOn;
+    if (!splitOn) return;
+    const counts = {};
+    history.filter(r => r.mode === mode).forEach(r => { const k = comboKey(r); counts[k] = (counts[k] || 0) + 1; });
+    const keys = Object.keys(counts).sort();
+    const current = `${distSizeNum}|${targetSizeNum}|${forgiving ? 'forgiving' : 'strict'}`;
+    if (!keys.includes(splitKey)) splitKey = keys.includes(current) ? current : keys[0] ?? null;
+    sel.innerHTML = keys.length
+      ? keys.map(k => `<option value="${k}">${comboLabel(k)} (${counts[k]})</option>`).join('')
+      : '<option value="">No runs yet</option>';
+    sel.value = splitKey ?? '';
+  }
+
   function drawGraph() {
+    updateSplitSelect();
     $('graphTitle').textContent = 'History · ' + MODES[mode];
     const g = cache.getContext('2d'), w = cache.width, h = cache.height;
     g.clearRect(0, 0, w, h);
-    const data = history.filter(r => r.mode === mode).slice(-40);
+    const data = graphData();
     const pad = { l: 44, r: 44, t: 16, b: 26 };
     g.font = '12px Inter, sans-serif'; g.fillStyle = 'rgba(228,217,213,.58)';
     g.strokeStyle = 'rgba(228,217,213,.13)'; g.lineWidth = 1;
@@ -445,9 +482,11 @@
         }
       };
 
-      // Target conditions (straight lines without dots)
-      line(d => pxToDistSize(d.radius ?? d.distance ?? 100), maxDistSize, '#e57373', [], false);
-      line(d => pxToSize(d.size ?? 26), maxSize, '#81c784', [], false);
+      // Target conditions (straight lines without dots); constant when split, so hidden
+      if (!splitOn) {
+        line(d => pxToDistSize(d.radius ?? d.distance ?? 100), maxDistSize, '#e57373', [], false);
+        line(d => pxToSize(d.size ?? 26), maxSize, '#81c784', [], false);
+      }
 
       // Performance results (solid with dots)
       line(d => d.cps, maxCps, '#F4D17D', [], true);
@@ -463,8 +502,10 @@
     let lx = pad.l;
     g.fillStyle = '#F4D17D'; g.fillText('● CPS', lx, h - 6); lx += 60;
     g.fillStyle = '#4f9bd1'; g.fillText('● Accuracy', lx, h - 6); lx += 80;
-    g.fillStyle = '#e57373'; g.fillText('― Distance (Size 1–6)', lx, h - 6); lx += 135;
-    g.fillStyle = '#81c784'; g.fillText('― Target size (Size 1–6)', lx, h - 6);
+    if (!splitOn) {
+      g.fillStyle = '#e57373'; g.fillText('― Distance (Size 1–6)', lx, h - 6); lx += 135;
+      g.fillStyle = '#81c784'; g.fillText('― Target size (Size 1–6)', lx, h - 6);
+    }
 
     gctx.clearRect(0, 0, w, h); gctx.drawImage(cache, 0, 0);
   }
@@ -474,7 +515,7 @@
     gctx.clearRect(0, 0, w, h);
     gctx.drawImage(cache, 0, 0);
 
-    const data = history.filter(r => r.mode === mode).slice(-40);
+    const data = graphData();
     if (!data.length) return;
 
     const pad = { l: 44, r: 44, t: 16, b: 26 };
@@ -519,7 +560,7 @@
 
     const distSizeVal = pxToDistSize(d.radius ?? d.distance ?? 100);
     const sizeVal = pxToSize(d.size ?? 26);
-    const boxW = 156, boxH = 74;
+    const boxW = 156, boxH = splitOn ? 56 : 74;
     let boxX = px + 12;
     if (boxX + boxW > w - pad.r + 30) boxX = px - boxW - 12;
     const boxY = Math.min(Math.max(pad.t + 2, my - boxH / 2), h - pad.b - boxH - 2);
@@ -544,8 +585,10 @@
     gctx.fillText(`CPS: ${d.cps.toFixed(2)}`, boxX + 8, boxY + 22);
     gctx.fillStyle = '#4f9bd1';
     gctx.fillText(`Acc: ${d.accuracy.toFixed(1)}% (${d.hits}h/${d.misses}m)`, boxX + 8, boxY + 38);
-    gctx.fillStyle = '#E4D9D5';
-    gctx.fillText(`Dist: Size ${distSizeVal} · Size: Size ${sizeVal}`, boxX + 8, boxY + 54);
+    if (!splitOn) {
+      gctx.fillStyle = '#E4D9D5';
+      gctx.fillText(`Dist: Size ${distSizeVal} · Size: Size ${sizeVal}`, boxX + 8, boxY + 54);
+    }
 
     gctx.restore();
   }
@@ -684,6 +727,15 @@
     }
   });
 
+  const splitChk = $('splitChk');
+  splitChk.checked = splitOn;
+  splitChk.onchange = () => {
+    splitOn = splitChk.checked;
+    localStorage.setItem('lolAimGraphSplit', splitOn ? '1' : '0');
+    splitChk.blur(); drawGraph();
+  };
+  $('splitSel').onchange = e => { splitKey = e.target.value || null; e.target.blur(); drawGraph(); };
+
   $('exportBtn').onclick = () => {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' }));
@@ -698,10 +750,6 @@
       save(); drawGraph();
     } catch { alert('Invalid history file.'); }
     e.target.value = '';
-  };
-  $('clearBtn').onclick = () => {
-    if (!confirm('Clear history for ' + MODES[mode] + '?')) return;
-    history = history.filter(r => r.mode !== mode); save(); drawGraph();
   };
 
   updateStats(0); updateHint(); drawGraph();
