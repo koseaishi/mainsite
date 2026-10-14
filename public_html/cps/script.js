@@ -4,6 +4,7 @@ const VOLUME_KEY = "cps_metronome_volume";
 const CLICK_MODE_KEY = "cps_click_mode";
 const MET_PLAY_KEY = "cps_metronome_play_during_click";
 const REST_DURATION_KEY = "cps_rest_duration";
+const DURATION_KEY = "cps_duration";
 const DURATIONS = ["5", "10", "30", "60"];
 const CLICK_MODES = ["left", "right"];
 const MIN_BPM = 300;
@@ -63,6 +64,9 @@ const statLine = document.getElementById("statLine");
 
 let clickMode = localStorage.getItem(CLICK_MODE_KEY) || "left";
 clickModeSelect.value = clickMode;
+
+const savedDuration = localStorage.getItem(DURATION_KEY);
+if (DURATIONS.includes(savedDuration)) durationSelect.value = savedDuration;
 
 let selectedDuration = Number(durationSelect.value);
 let running = false;
@@ -175,6 +179,7 @@ document.addEventListener("keydown", (e) => {
 
 durationSelect.addEventListener("change", () => {
   selectedDuration = Number(durationSelect.value);
+  localStorage.setItem(DURATION_KEY, durationSelect.value);
   renderChart();
 });
 
@@ -206,9 +211,9 @@ function clampBpm(value) {
   return Math.min(MAX_BPM, Math.max(MIN_BPM, value));
 }
 
-function setBpm(value, persist = true) {
+function setBpm(value, persist = true, updateInput = true) {
   bpm = clampBpm(value);
-  bpmInput.value = bpm;
+  if (updateInput) bpmInput.value = bpm;
   bpmSlider.value = bpm;
   bpsIndicator.textContent = `(${(bpm / 60).toFixed(2)} bps)`;
   if (persist) localStorage.setItem(BPM_KEY, String(bpm));
@@ -302,7 +307,16 @@ metronomeToggle.addEventListener("click", () => {
   }
 });
 
-bpmInput.addEventListener("input", () => setBpm(Number(bpmInput.value)));
+// while typing, only apply values already in range and never rewrite the field,
+// otherwise partial entries like "4" get clamped to 300 mid-keystroke
+bpmInput.addEventListener("input", () => {
+  const value = Number(bpmInput.value);
+  if (bpmInput.value !== "" && value >= MIN_BPM && value <= MAX_BPM) setBpm(value, true, false);
+});
+// commit (and clamp) on Enter or when leaving the field
+bpmInput.addEventListener("change", () => {
+  setBpm(bpmInput.value === "" ? bpm : Number(bpmInput.value));
+});
 bpmSlider.addEventListener("input", () => setBpm(Number(bpmSlider.value)));
 
 // ---------- Rest timer ----------
